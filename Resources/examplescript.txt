@@ -1,0 +1,18 @@
+// Just Some Example Code For Now
+/*
+  This is a multi-line commment.
+*/
+draw_clear(c_teal);
+var foo, bar, foobar;
+foo = 30;
+bar = 20;
+foobar = foo + bar;
+if (foobar = 50) {
+  repeat (100) {
+    draw_set_color(c_white);
+    draw_line(random(800), random(600), random(800), random(600));
+  }
+}
+
+foobar = "string" + 'char';
+return foobar;
