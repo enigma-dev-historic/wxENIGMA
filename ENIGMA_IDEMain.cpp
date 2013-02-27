@@ -119,20 +119,23 @@ END_EVENT_TABLE()
 
 ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
 {
-
     Create(parent, wxID_ANY, _("wxENIGMA - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     SetClientSize(wxSize(886,465));
+    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
+
+    // *** Create Main AUI Managers ***
     mainAUIManager = new wxAuiManager(this, wxAUI_MGR_ALLOW_ACTIVE_PANE|wxAUI_MGR_DEFAULT);
-    editingAUINotebook = new wxAuiNotebook(this, ID_EDITINGAUINOTEBOOK, wxPoint(29,40), wxSize(153,431), wxAUI_NB_TAB_SPLIT|wxAUI_NB_TAB_MOVE|wxAUI_NB_TAB_EXTERNAL_MOVE|wxAUI_NB_DEFAULT_STYLE);
-    editingAUINotebook->SetMinSize(wxSize(50,0));
-    editingAUINotebook->SetFocus();
-    mainAUIManager->AddPane(editingAUINotebook, wxAuiPaneInfo().Name(_T("EditingPane")).Caption(_("Editing")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().CloseButton(false).Center().BestSize(wxSize(153,431)).MinSize(wxSize(50,0)));
     outputAUINotebook = new wxAuiNotebook(this, ID_OUTPUTAUINOTEBOOK, wxDefaultPosition, wxSize(95,431), wxAUI_NB_BOTTOM|wxAUI_NB_DEFAULT_STYLE);
     outputAUINotebook->SetMinSize(wxSize(0,150));
     mainAUIManager->AddPane(outputAUINotebook, wxAuiPaneInfo().Name(_T("OutputPane")).Caption(_("Output")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().Bottom().BestSize(wxSize(95,431)).MinSize(wxSize(0,150)));
     managementAUINotebook = new wxAuiNotebook(this, ID_MANAGEMENTAUINOTEBOOK, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE);
     managementAUINotebook->SetMinSize(wxSize(200,0));
     mainAUIManager->AddPane(managementAUINotebook, wxAuiPaneInfo().Name(_T("PaneName")).Caption(_("Management")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().Layer(1).Right().MinSize(wxSize(200,0)));
+    editingAUINotebook = new wxAuiNotebook(this, ID_EDITINGAUINOTEBOOK, wxPoint(29,40), wxSize(153,431), wxAUI_NB_TAB_SPLIT|wxAUI_NB_TAB_MOVE|wxAUI_NB_TAB_EXTERNAL_MOVE|wxAUI_NB_DEFAULT_STYLE);
+    editingAUINotebook->SetMinSize(wxSize(50,0));
+    mainAUIManager->AddPane(editingAUINotebook, wxAuiPaneInfo().Name(_T("EditingPane")).Caption(_("Editing")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().CloseButton(false).Center().BestSize(wxSize(153,431)).MinSize(wxSize(50,0)));
+
+    // *** Create Edit Toolbar ***
     editToolbar = new wxAuiToolBar(this, ID_AUITOOLBAR1, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     editToolbar->AddTool(ID_SAVETOOLITEM, _("SaveItem"), wxBitmap(wxImage(_T("Resources/icons/disk.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save"), wxEmptyString, NULL);
     editToolbar->AddTool(ID_SAVEALLTOOLITEM, _("SaveAllItem"), wxBitmap(wxImage(_T("Resources/icons/disk_multiple.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save All"), wxEmptyString, NULL);
@@ -148,6 +151,8 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     editToolbar->AddTool(ID_AUITOOLBARITEM29, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/spellcheck.png"))), wxNullBitmap, wxITEM_CHECK, _("Intellisense"), wxEmptyString, NULL);
     editToolbar->Realize();
     mainAUIManager->AddPane(editToolbar, wxAuiPaneInfo().Name(_T("EditPane")).ToolbarPane().Caption(_("Edit")).Layer(10).Top().Gripper());
+
+    // *** Create Build Toolbar ***
     buildToolbar = new wxAuiToolBar(this, ID_BUILDTOOLBAR, wxPoint(168,10), wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     buildToolbar->AddTool(ID_AUITOOLBARITEM6, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/stop_red.png"))), wxNullBitmap, wxITEM_NORMAL, _("Stop"), wxEmptyString, NULL);
     buildToolbar->EnableTool(ID_AUITOOLBARITEM6, false);
@@ -160,6 +165,8 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     buildToolbar->AddTool(ID_AUITOOLBARITEM24, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/plugin.png"))), wxNullBitmap, wxITEM_NORMAL, _("Game Plugins"), wxEmptyString, NULL);
     buildToolbar->Realize();
     mainAUIManager->AddPane(buildToolbar, wxAuiPaneInfo().Name(_T("BuildPane")).ToolbarPane().Caption(_("Pane caption")).Layer(10).Top().Gripper());
+
+    // *** Create Resources Toolbar ***
     resourcesToolbar = new wxAuiToolBar(this, ID_RESOURCESTOOLBAR, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM22, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/folder_add.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Folder"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM23, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_add.png"))), wxNullBitmap, wxITEM_NORMAL, _("Add External File"), wxEmptyString, NULL);
@@ -174,6 +181,8 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM20, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/map.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Room"), wxEmptyString, NULL);
     resourcesToolbar->Realize();
     mainAUIManager->AddPane(resourcesToolbar, wxAuiPaneInfo().Name(_T("ResourcesPane")).ToolbarPane().Caption(_("Resources")).Layer(10).Top().Gripper());
+
+    // *** Other Toolbars... ***
     helpToolbar = new wxAuiToolBar(this, ID_HELPTOOLBAR, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     helpToolbar->AddTool(ID_AUITOOLBARITEM11, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/help.png"))), wxNullBitmap, wxITEM_NORMAL, _("Help"), wxEmptyString, NULL);
     helpToolbar->AddTool(ID_AUITOOLBARITEM12, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/information.png"))), wxNullBitmap, wxITEM_NORMAL, _("About"), wxEmptyString, NULL);
@@ -183,23 +192,24 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     quickfindToolBar = new wxAuiToolBar(this, ID_QUICKFINDTOOLBAR, wxPoint(841,8), wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     quickfindToolBar->Realize();
     mainAUIManager->AddPane(quickfindToolBar, wxAuiPaneInfo().Name(_T("QuickFind")).ToolbarPane().Caption(_("Quick Find")).Layer(10).Top().Gripper());
+
     mainAUIManager->Update();
 
-
-    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
-
     hierarchyImageList = new wxImageList(16, 16, 11);
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/script.png"))));
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/font.png"))));
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/picture.png"))));
-    hierarchyImageList->Add(wxBitmap(hierarchyImageList_4_XPM));
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/map.png"))));
-    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/sound.png"))));
-    hierarchyImageList->Add(wxBitmap(hierarchyImageList_7_XPM));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/notice.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/warning.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/error.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/page_white.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/script.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/font.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/picture.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/map.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/sound.png"))));
+
+    CreateOutputLogTab();
+    CreateOuputMessagesTab();
+    OutputClearAll();
 
     CreateMainMenuBar();
     CreateMainStatusBar();
@@ -210,39 +220,11 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     CreateScintillaTab();
     CreateScintillaTab();
 
-    // NOTE: The CreateOutputLogTab() function will set the default text of the control, the OutputClear() should
-    // remove it.
-    CreateOutputLogTab();
-    CreateOuputMessagesTab();
-    OutputClearAll();
-    OutputLine("This Line Should Not Appear");
-    OutputLogClear();
-    OutputLine("IDE Loaded");
-    OutputText("Test Output Line \n");
-    OutputText("Test Output Line 2\n");
-    OutputText("Exit Code 0x100069");
-
-    OutputMessagesClear();
-    OutputMessage(MSG_NOTICE, "test.cpp", "Line 666 Pos 69", "Example output message description.");
-    OutputMessage(MSG_NOTICE, "script1.cpp", "Line 177 Pos 3", "Example output message description.");
-    OutputMessage(MSG_WARNING, "script2.cpp", "Line 357 Pos 1", "Example output message description.");
-    OutputMessage(MSG_ERROR, "script3.cpp", "Line 289 Pos 2", "Example output message description.");
-    OutputMessage(MSG_WARNING, "test2.cpp", "Line 255 Pos 45", "Example output message description.");
-    OutputMessage(MSG_NOTICE, "test23.cpp", "Line 265 Pos 49", "Example output message description.");
-
     managementAUINotebook->ChangeSelection(0);
     outputAUINotebook->ChangeSelection(0);
     editingAUINotebook->ChangeSelection(0);
 
-    //editingAUINotebook->
-     editingAUINotebook->SetFocus();
-htmlWelcome->SetFocus();
-htmlWelcome->Show();
-editingAUINotebook->Show();
- editingAUINotebook->SetFocus();
-//     editingAUINotebook->SetActive();
-//mainAUIManager->ChangeSelection(0);
-
+    OutputLine("IDE Loaded and Ready");
     mainStatusBar->SetStatusText(_T("Ready"));
 }
 
@@ -382,49 +364,179 @@ void ENIGMA_IDEFrame::CreateMainStatusBar()
     SetStatusBar(mainStatusBar);
 }
 
+struct MyTreeItemData: wxTreeItemData {
+    bool is_directory = false;
+    MyTreeItemData()
+    {
+    }
+    MyTreeItemData(bool dir): is_directory(dir)
+    {
+    }
+};
+
+class HierTreeCtrl : public wxTreeCtrl
+{
+public:
+        HierTreeCtrl(wxWindow* parent, long id);
+        wxTreeItemId m_draggedItem;
+        wxArrayTreeItemIds draggedItems;
+
+        bool ItemIsAncestor(wxTreeItemId& ancestor, wxTreeItemId& descendant) {
+            if (ancestor == descendant) return true;
+            if (descendant == GetRootItem()) return false;
+            wxTreeItemId parent = GetItemParent(descendant);
+            return ItemIsAncestor(ancestor, parent);
+        }
+
+        wxTreeItemId AppendDirectory(wxTreeItemId& destination, const char *text)
+        {
+            wxTreeItemId newItem;
+            newItem = AppendItem(destination, wxString::FromUTF8(text));
+            SetItemData(newItem, new MyTreeItemData(true));
+            SetItemImage(newItem, 3, wxTreeItemIcon_Normal);
+            return newItem;
+        }
+
+
+        wxTreeItemId AppendFile(wxTreeItemId& destination, const char *text)
+        {
+            wxTreeItemId newItem;
+            newItem = AppendItem(destination, wxString::FromUTF8(text));
+            SetItemData(newItem, new MyTreeItemData(false));
+            SetItemImage(newItem, 4, wxTreeItemIcon_Normal);
+            return newItem;
+        }
+
+        wxTreeItemId MoveItem(wxTreeItemId& source, wxTreeItemId& destination, wxTreeItemId& parent)
+        {
+            wxTreeItemId newItem;
+            if (parent != destination)
+            {
+                newItem = InsertItem(parent, destination, GetItemText(source), GetItemImage(source), -1,
+                                    new MyTreeItemData(*(MyTreeItemData*)GetItemData(source)));
+            }
+            else
+            {
+                newItem = AppendItem(destination, GetItemText(source), GetItemImage(source), -1,
+                                    new MyTreeItemData(*(MyTreeItemData*)GetItemData(source)));
+            }
+
+            // Move all the children from the old parent to the new one recursively
+            wxTreeItemIdValue cookie;
+            wxTreeItemId oldChild = GetFirstChild(source, cookie);
+            while (GetChildrenCount(source, false) > 0)
+            {
+                MoveItem(oldChild, newItem, newItem);
+                oldChild = GetFirstChild(source, cookie);
+            }
+
+            Delete(source);
+            return newItem;
+        }
+
+        wxTreeItemId MoveItem(wxTreeItemId& source, wxTreeItemId& destination)
+        {
+            wxTreeItemId parent = GetItemParent(destination);
+            MoveItem(source, destination, parent);
+        }
+
+        DECLARE_EVENT_TABLE()
+
+        void OnBeginDrag(wxTreeEvent& event)
+        {
+                GetSelections(draggedItems);
+                // need to explicitly allow drag
+                if ( event.GetItem() != GetRootItem() )
+                {
+                        m_draggedItem = event.GetItem();
+                        SelectItem(m_draggedItem);
+
+                        wxPoint clientpt = event.GetPoint();
+                        wxPoint screenpt = ClientToScreen(clientpt);
+                        event.Allow();
+                }
+        }
+
+        void OnEndDrag(wxTreeEvent& event)
+        {
+            wxTreeItemId itemSrc, itemDst = event.GetItem();
+
+
+            for (int i = 0; i < draggedItems.GetCount(); i++)
+            {
+                itemSrc = draggedItems.Item(i);
+                if (itemDst == NULL || itemSrc == NULL || itemDst == itemSrc ||
+                    ItemIsAncestor(itemSrc, itemDst))
+                {
+                    draggedItems.Clear();
+                    return;
+                }
+
+                if (((MyTreeItemData*)GetItemData(itemDst))->is_directory == false)
+                {
+                    MoveItem(itemSrc, itemDst);
+                }
+                else
+                {
+                    MoveItem(itemSrc, itemDst, itemDst);
+                }
+            }
+
+            draggedItems.Clear();
+        }
+};
+
+BEGIN_EVENT_TABLE(HierTreeCtrl, wxTreeCtrl)
+EVT_TREE_BEGIN_DRAG(wxID_ANY, HierTreeCtrl::OnBeginDrag)
+EVT_TREE_END_DRAG(wxID_ANY, HierTreeCtrl::OnEndDrag)
+END_EVENT_TABLE()
+
+
+HierTreeCtrl::HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
+: wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
+{
+
+}
+
+HierTreeCtrl* hierarchyTreeCtrl;
 void ENIGMA_IDEFrame::CreateHierarchyTab()
 {
-    hierarchyTreeCtrl = new wxTreeCtrl(this, ID_HIERARCHYTREECTRL, wxDefaultPosition, wxDefaultSize,
-      wxTR_MULTIPLE|wxTR_NO_LINES|wxTR_TWIST_BUTTONS|wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_DEFAULT_STYLE|wxVSCROLL|wxHSCROLL|wxTR_HAS_VARIABLE_ROW_HEIGHT,
-      wxDefaultValidator, _T("ID_HIERARCHYTREECTRL"));
+   // wxDefaultPosition, wxDefaultSize,
+   //   wxDefaultValidator, _T("ID_HIERARCHYTREECTRL")
+    hierarchyTreeCtrl = new HierTreeCtrl(this, ID_HIERARCHYTREECTRL);
+    hierarchyTreeCtrl->SetWindowStyle(wxTR_HIDE_ROOT|wxTR_MULTIPLE|wxTR_NO_LINES|wxTR_TWIST_BUTTONS|wxTR_EDIT_LABELS|wxTR_DEFAULT_STYLE|wxVSCROLL|wxHSCROLL|wxTR_HAS_VARIABLE_ROW_HEIGHT);
     wxFont Font_2(10, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     //hierarchyTreeCtrl->SetFont(Font_2);
-    wxTreeItemId hierarchyTreeCtrl_Item1 = hierarchyTreeCtrl->AddRoot(_T("Root Node"));
-    wxTreeItemId hierarchyTreeCtrl_Item2 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Rooms"));
-    wxTreeItemId hierarchyTreeCtrl_Item3 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item2, _T("Room"));
-    wxTreeItemId hierarchyTreeCtrl_Item4 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Fonts"));
-    wxTreeItemId hierarchyTreeCtrl_Item5 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item4, _T("HUD"));
-    wxTreeItemId hierarchyTreeCtrl_Item6 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item5, _T("Font"));
-    wxTreeItemId hierarchyTreeCtrl_Item7 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item4, _T("Font"));
-    wxTreeItemId hierarchyTreeCtrl_Item8 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Guns"));
-    wxTreeItemId hierarchyTreeCtrl_Item9 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item8, _T("Script"));
-    wxTreeItemId hierarchyTreeCtrl_Item10 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Script"));
-    wxTreeItemId hierarchyTreeCtrl_Item11 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Image"));
-    wxTreeItemId hierarchyTreeCtrl_Item12 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Image"));
-    wxTreeItemId hierarchyTreeCtrl_Item13 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Image"));
-    wxTreeItemId hierarchyTreeCtrl_Item14 = hierarchyTreeCtrl->AppendItem(hierarchyTreeCtrl_Item1, _T("Sound"));
+    wxTreeItemId hierarchyTreeCtrl_rootItem = hierarchyTreeCtrl->AddRoot(_T("Root Node"));
+    wxTreeItemId hierarchyTreeCtrl_Item2 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Rooms");
+    wxTreeItemId hierarchyTreeCtrl_Item3 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_Item2, "Room");
+    wxTreeItemId hierarchyTreeCtrl_Item4 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Fonts");
+    wxTreeItemId hierarchyTreeCtrl_Item5 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_Item4, "HUD");
+    wxTreeItemId hierarchyTreeCtrl_Item6 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_Item5, "Font");
+    wxTreeItemId hierarchyTreeCtrl_Item7 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_Item4, "Font");
+    wxTreeItemId hierarchyTreeCtrl_Item8 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Guns");
+    wxTreeItemId hierarchyTreeCtrl_Item9 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_Item8, "Script");
+    wxTreeItemId hierarchyTreeCtrl_Item10 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_rootItem, "Script");
+    wxTreeItemId hierarchyTreeCtrl_Item11 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_rootItem, "Image");
+    wxTreeItemId hierarchyTreeCtrl_Item12 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_rootItem, "Image");
+    wxTreeItemId hierarchyTreeCtrl_Item13 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_rootItem, "Image");
+    wxTreeItemId hierarchyTreeCtrl_Item14 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_rootItem, "Sound");
     hierarchyTreeCtrl->ScrollTo(hierarchyTreeCtrl_Item2);
     hierarchyTreeCtrl->SetMinSize(wxSize(150,0));
     managementAUINotebook->AddPage(hierarchyTreeCtrl, _("Hierarchy"), true);
 
     // Set the images for hierarchyTreeCtrl.
     hierarchyTreeCtrl->SetImageList(hierarchyImageList);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item2, 0, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item3, 5, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item4, 0, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item5, 0, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item6, 2, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item7, 2, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item8, 0, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item9, 1, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item10, 1, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item11, 3, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item12, 3, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item13, 3, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item14, 6, wxTreeItemIcon_Normal);
 
-//    Connect(id_quitMenuItem,EVT_TREE_BEGIN_DRAG,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnQuit);
-    //Connect(id_quitMenuItem,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnQuit);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item3, 8, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item6, 6, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item7, 6, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item9, 5, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item10, 5, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item11, 7, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item12, 7, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item13, 7, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item14, 9, wxTreeItemIcon_Normal);
 }
 
 void ENIGMA_IDEFrame::CreateWelcomeTab()
@@ -578,7 +690,7 @@ void ENIGMA_IDEFrame::CreateOuputMessagesTab()
     messagesListView->SetColumnWidth(0, 140);
     messagesListView->SetColumnWidth(1, 100);
     messagesListView->SetColumnWidth(2, 500);
-    messagesListView->SetImageList(hierarchyImageList, 1);
+    messagesListView->SetImageList(hierarchyImageList, wxIMAGE_LIST_NORMAL);
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     messagesListView->SetFont(Font_2);
     //messagesListView->SetSingleStyle(wxLC_HRULES, true);
@@ -599,16 +711,22 @@ void ENIGMA_IDEFrame::OutputMessagesClear()
 void ENIGMA_IDEFrame::OutputLogClear()
 {
     outputLogCtrl->Clear();
+    // repaints the control...
+    outputLogCtrl->Update();
 }
 
 void ENIGMA_IDEFrame::OutputText(const char *text)
 {
     outputLogCtrl->WriteText(wxString::FromUTF8(text));
+    // repaints the control...
+    outputLogCtrl->Update();
 }
 
 void ENIGMA_IDEFrame::OutputLine(const char *text)
 {
     outputLogCtrl->WriteText(wxString::FromUTF8(text) + _T("\n"));
+    // repaints the control...
+    outputLogCtrl->Update();
 }
 
 void ENIGMA_IDEFrame::OutputMessage(int type, const char *origin, const char *location, const char *description)
@@ -621,14 +739,14 @@ void ENIGMA_IDEFrame::OutputMessage(int type, const char *origin, const char *lo
     {
         case MSG_NOTICE:
             // notice
-            listItem.SetImage(8);
+            listItem.SetImage(0);
             break;
         case MSG_WARNING:
-            listItem.SetImage(9);
+            listItem.SetImage(1);
             // warning
             break;
         case MSG_ERROR:
-            listItem.SetImage(10);
+            listItem.SetImage(2);
             // error
             break;
         default:
@@ -646,18 +764,3 @@ void ENIGMA_IDEFrame::OnClose(wxCloseEvent& event)
     //mainAUIManager->SavePerspective();
     event.Skip();
 }
-/*
-BEGIN_EVENT_TABLE(hierarchyTreeCtrl, wxTreeCtrl)
-	EVT_TREE_BEGIN_DRAG(hierarchyTreeCtrl, hierarchyTreeCtrl::OnBeginDrag)
-	EVT_TREE_END_DRAG(hierarchyTreeCtrl, hierarchyTreeCtrl::OnEndDrag)
-END_EVENT_TABLE()
-
-void hierarchyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
-{
-
-}
-
-void hierarchyTreeCtrl::OnEndDrag(wxTreeEvent& event)
-{
-
-}*/

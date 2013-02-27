@@ -10,6 +10,9 @@
 #ifndef ENIGMA_IDEMAIN_H
 #define ENIGMA_IDEMAIN_H
 
+#include <stdio.h>
+using namespace std;
+
 #include <wx/menu.h>
 #include <wx/frame.h>
 #include <wx/statusbr.h>
@@ -45,6 +48,7 @@ class ENIGMA_IDEFrame: public wxFrame
         void OnClose(wxCloseEvent& event);
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnTreeBeginDrag(wxTreeEvent& event);
         void OnMarginClick(wxStyledTextEvent& event);
         void ShowAutoComplete(wxStyledTextEvent& event);
 
@@ -99,7 +103,7 @@ class ENIGMA_IDEFrame: public wxFrame
         static const long ID_OUTPUTLOGCTRL;
         static const long ID_MESSAGESLISTVIEW;
 
-                static const long ID_EDITINGAUINOTEBOOK;
+        static const long ID_EDITINGAUINOTEBOOK;
         static const long ID_OUTPUTAUINOTEBOOK;
         static const long ID_MANAGEMENTAUINOTEBOOK;
         static const long ID_SAVETOOLITEM;
@@ -142,7 +146,7 @@ class ENIGMA_IDEFrame: public wxFrame
         // Declarations
         wxStatusBar* mainStatusBar;
         wxHtmlWindow* htmlWelcome;
-        wxTreeCtrl* hierarchyTreeCtrl;
+
         wxPropertyGrid* propertyCtrl;
         wxRichTextCtrl* outputLogCtrl;
         wxListView* messagesListView;
