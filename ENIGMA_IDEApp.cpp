@@ -8,25 +8,26 @@
  **************************************************************/
 
 #include "ENIGMA_IDEApp.h"
+#include <wx/fs_inet.h>
 
-//(*AppHeaders
 #include "ENIGMA_IDEMain.h"
 #include <wx/image.h>
-//*)
+#include <stdio.h>
 
 IMPLEMENT_APP(ENIGMA_IDEApp);
 
 bool ENIGMA_IDEApp::OnInit()
 {
-    //(*AppInitialize
     bool wxsOK = true;
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
+        wxFileSystem::AddHandler(new wxInternetFSHandler);
     	ENIGMA_IDEFrame* Frame = new ENIGMA_IDEFrame(0);
+        //Frame->SetIcon(wxIcon(_T("./Resources/enigmaicon.ico")));
+        //Frame->SetIcon(wxICON(aaaa));
     	Frame->Show();
     	SetTopWindow(Frame);
     }
-    //*)
     return wxsOK;
 }
