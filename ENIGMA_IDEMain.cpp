@@ -377,9 +377,15 @@ struct MyTreeItemData: wxTreeItemData {
 class HierTreeCtrl : public wxTreeCtrl
 {
 public:
-        HierTreeCtrl(wxWindow* parent, long id);
+        //HierTreeCtrl(wxWindow* parent, long id);
         wxTreeItemId m_draggedItem;
         wxArrayTreeItemIds draggedItems;
+
+        HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
+        : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
+        {
+
+        }
 
         bool ItemIsAncestor(wxTreeItemId& ancestor, wxTreeItemId& descendant) {
             if (ancestor == descendant) return true;
@@ -491,13 +497,6 @@ EVT_TREE_BEGIN_DRAG(wxID_ANY, HierTreeCtrl::OnBeginDrag)
 EVT_TREE_END_DRAG(wxID_ANY, HierTreeCtrl::OnEndDrag)
 END_EVENT_TABLE()
 
-
-HierTreeCtrl::HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
-: wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
-{
-
-}
-
 HierTreeCtrl* hierarchyTreeCtrl;
 void ENIGMA_IDEFrame::CreateHierarchyTab()
 {
@@ -565,12 +564,44 @@ void ENIGMA_IDEFrame::CreatePropertyTab()
     managementAUINotebook->AddPage(propertyCtrl, _("Properties"), true);
 }
 
+class StyledTextCtrl : public wxStyledTextCtrl
+{
+public:
+        StyledTextCtrl(wxWindow* parent, const long id = wxID_ANY)
+        : wxStyledTextCtrl(parent, id)
+        {
+            Connect(wxEVT_STC_MARGINCLICK, wxStyledTextEventHandler(StyledTextCtrl::OnMarginClick), NULL, this);
+            Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(StyledTextCtrl::ShowAutoComplete), NULL, this);
+        }
 
-wxStyledTextCtrl* text;
+        void ShowAutoComplete(wxStyledTextEvent& event)
+        {
+            AutoCompShow(0, _T("draw_clear draw_line draw_set_color random"));
+        }
+
+        void OnMarginClick(wxStyledTextEvent& event)
+        {
+            if (event.GetMargin() == MARGIN_FOLD)
+            {
+                int lineClick = LineFromPosition(event.GetPosition());
+                int levelClick = GetFoldLevel(lineClick);
+
+                if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
+                {
+                    ToggleFold(lineClick);
+                }
+            }
+        }
+
+        //DECLARE_EVENT_TABLE()
+
+};
+
+
 void ENIGMA_IDEFrame::CreateScintillaTab()
 {
-
-    text = new wxStyledTextCtrl(this, wxID_ANY);
+    StyledTextCtrl* text;
+    text = new StyledTextCtrl(this, wxID_ANY);
     text->StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour (0, 0, 0) );
     text->StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour (255, 255, 255));
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
@@ -644,29 +675,7 @@ text->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
     text->SetSelection(0, 0);
     editingAUINotebook->AddPage(text, _("Scintilla Tab"), true);
 
-    text->Connect(wxEVT_STC_MARGINCLICK, wxStyledTextEventHandler(ENIGMA_IDEFrame::OnMarginClick), NULL, this);
-    text->Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(ENIGMA_IDEFrame::ShowAutoComplete), NULL, this);
     text->AutoCompSetAutoHide(true);
-
-}
-
-void ENIGMA_IDEFrame::ShowAutoComplete(wxStyledTextEvent& event)
-{
-    text->AutoCompShow(0, _T("draw_clear draw_line draw_set_color random"));
-}
-
-void ENIGMA_IDEFrame::OnMarginClick(wxStyledTextEvent& event)
-{
-    if (event.GetMargin() == MARGIN_FOLD)
-    {
-        int lineClick = text->LineFromPosition(event.GetPosition());
-        int levelClick = text->GetFoldLevel(lineClick);
-
-        if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
-        {
-            text->ToggleFold(lineClick);
-        }
-    }
 }
 
 void ENIGMA_IDEFrame::CreateOutputLogTab()
