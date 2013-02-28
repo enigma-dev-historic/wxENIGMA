@@ -124,9 +124,11 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
 
     // *** Create Main AUI Managers ***
-    mainAUIManager = new wxAuiManager(this, wxAUI_MGR_ALLOW_ACTIVE_PANE|wxAUI_MGR_DEFAULT);
+    mainAUIManager = new wxAuiManager(this, wxAUI_MGR_LIVE_RESIZE|wxAUI_MGR_ALLOW_ACTIVE_PANE|wxAUI_MGR_DEFAULT);
     outputAUINotebook = new wxAuiNotebook(this, ID_OUTPUTAUINOTEBOOK, wxDefaultPosition, wxSize(95,431), wxAUI_NB_BOTTOM|wxAUI_NB_DEFAULT_STYLE);
     outputAUINotebook->SetMinSize(wxSize(0,150));
+   // outputAUINotebook->SetUniformBitmapSize(wxDefaultSize);
+   // outputAUINotebook->SetTabCtrlHeight(20);
     mainAUIManager->AddPane(outputAUINotebook, wxAuiPaneInfo().Name(_T("OutputPane")).Caption(_("Output")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().Bottom().BestSize(wxSize(95,431)).MinSize(wxSize(0,150)));
     managementAUINotebook = new wxAuiNotebook(this, ID_MANAGEMENTAUINOTEBOOK, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE);
     managementAUINotebook->SetMinSize(wxSize(200,0));
@@ -364,12 +366,12 @@ void ENIGMA_IDEFrame::CreateMainStatusBar()
     SetStatusBar(mainStatusBar);
 }
 
-struct MyTreeItemData: wxTreeItemData {
+struct HierTreeItemData: wxTreeItemData {
     bool is_directory = false;
-    MyTreeItemData()
+    HierTreeItemData()
     {
     }
-    MyTreeItemData(bool dir): is_directory(dir)
+    HierTreeItemData(bool dir): is_directory(dir)
     {
     }
 };
@@ -377,14 +379,61 @@ struct MyTreeItemData: wxTreeItemData {
 class HierTreeCtrl : public wxTreeCtrl
 {
 public:
-        //HierTreeCtrl(wxWindow* parent, long id);
-        wxTreeItemId m_draggedItem;
         wxArrayTreeItemIds draggedItems;
+        wxMenu* contextMenu;
+        wxMenuItem* dirMenuItem;
+        wxMenuItem* fileMenuItem;
+        wxMenuItem* deleteMenuItem;
 
         HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
         : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
         {
+            static const long dirID = wxNewId();
+            static const long fileID = wxNewId();
+            static const long deleteID = wxNewId();
+            contextMenu = new wxMenu();
+            dirMenuItem = new wxMenuItem(contextMenu, dirID, _("Create Directory"), _("Create a new file directory."), wxITEM_NORMAL);
+            contextMenu->Append(dirMenuItem);
+            fileMenuItem = new wxMenuItem(contextMenu, fileID, _("Create File"), _("Create a new file."), wxITEM_NORMAL);
+            contextMenu->Append(fileMenuItem);
+            deleteMenuItem = new wxMenuItem(contextMenu, deleteID, _("Delete"), _("Delete the file from the project."), wxITEM_NORMAL);
+            contextMenu->Append(deleteMenuItem);
 
+            Connect(dirID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateDirectory);
+            Connect(fileID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateFile);
+            Connect(deleteID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnDelete);
+
+            SetSpacing(10);
+        }
+
+        void OnCreateDirectory()
+        {
+            wxTreeItemId rootItem = GetRootItem();
+            AppendDirectory(rootItem, "New Directory");
+        }
+
+        void OnCreateFile()
+        {
+            wxTreeItemId rootItem = GetRootItem();
+            AppendFile(rootItem, "New File");
+        }
+
+        void OnDelete()
+        {
+            GetSelections(draggedItems);
+            wxTreeItemId item;
+
+            for (int i = 0; i < draggedItems.GetCount(); i++)
+            {
+                item = draggedItems.Item(i);
+                if (item == GetRootItem() || item == NULL)
+                {
+                    break;
+                }
+                Delete(item);
+            }
+
+            draggedItems.Clear();
         }
 
         bool ItemIsAncestor(wxTreeItemId& ancestor, wxTreeItemId& descendant) {
@@ -398,7 +447,7 @@ public:
         {
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
-            SetItemData(newItem, new MyTreeItemData(true));
+            SetItemData(newItem, new HierTreeItemData(true));
             SetItemImage(newItem, 3, wxTreeItemIcon_Normal);
             return newItem;
         }
@@ -408,7 +457,7 @@ public:
         {
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
-            SetItemData(newItem, new MyTreeItemData(false));
+            SetItemData(newItem, new HierTreeItemData(false));
             SetItemImage(newItem, 4, wxTreeItemIcon_Normal);
             return newItem;
         }
@@ -419,12 +468,12 @@ public:
             if (parent != destination)
             {
                 newItem = InsertItem(parent, destination, GetItemText(source), GetItemImage(source), -1,
-                                    new MyTreeItemData(*(MyTreeItemData*)GetItemData(source)));
+                                    new HierTreeItemData(*(HierTreeItemData*)GetItemData(source)));
             }
             else
             {
                 newItem = AppendItem(destination, GetItemText(source), GetItemImage(source), -1,
-                                    new MyTreeItemData(*(MyTreeItemData*)GetItemData(source)));
+                                    new HierTreeItemData(*(HierTreeItemData*)GetItemData(source)));
             }
 
             // Move all the children from the old parent to the new one recursively
@@ -448,19 +497,21 @@ public:
 
         DECLARE_EVENT_TABLE()
 
+        void OnContextMenu(wxContextMenuEvent& event)
+        {
+                wxPoint clientpt = event.GetPosition();
+                wxPoint screenpt = ScreenToClient(clientpt);
+                //event.Allow();
+                PopupMenu(contextMenu, screenpt.x, screenpt.y);
+        }
+
         void OnBeginDrag(wxTreeEvent& event)
         {
                 GetSelections(draggedItems);
-                // need to explicitly allow drag
-                if ( event.GetItem() != GetRootItem() )
-                {
-                        m_draggedItem = event.GetItem();
-                        SelectItem(m_draggedItem);
 
-                        wxPoint clientpt = event.GetPoint();
-                        wxPoint screenpt = ClientToScreen(clientpt);
-                        event.Allow();
-                }
+                wxPoint clientpt = event.GetPoint();
+                wxPoint screenpt = ClientToScreen(clientpt);
+                event.Allow();
         }
 
         void OnEndDrag(wxTreeEvent& event)
@@ -474,11 +525,10 @@ public:
                 if (itemDst == NULL || itemSrc == NULL || itemDst == itemSrc ||
                     ItemIsAncestor(itemSrc, itemDst))
                 {
-                    draggedItems.Clear();
-                    return;
+                    break;
                 }
 
-                if (((MyTreeItemData*)GetItemData(itemDst))->is_directory == false)
+                if (((HierTreeItemData*)GetItemData(itemDst))->is_directory == false)
                 {
                     MoveItem(itemSrc, itemDst);
                 }
@@ -493,6 +543,7 @@ public:
 };
 
 BEGIN_EVENT_TABLE(HierTreeCtrl, wxTreeCtrl)
+EVT_CONTEXT_MENU(HierTreeCtrl::OnContextMenu)
 EVT_TREE_BEGIN_DRAG(wxID_ANY, HierTreeCtrl::OnBeginDrag)
 EVT_TREE_END_DRAG(wxID_ANY, HierTreeCtrl::OnEndDrag)
 END_EVENT_TABLE()
