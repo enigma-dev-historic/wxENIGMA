@@ -1,3 +1,6 @@
+enigma/*
 *.depend
 *.layout
 *.o
+bin
+obj

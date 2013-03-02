@@ -6,7 +6,6 @@
  * Copyright: Robert B Colton (enigma-dev.org)
  * License:
  **************************************************************/
-
 #ifndef ENIGMA_IDEMAIN_H
 #define ENIGMA_IDEMAIN_H
 
@@ -42,33 +41,7 @@ class ENIGMA_IDEFrame: public wxFrame
         ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id = -1);
         virtual ~ENIGMA_IDEFrame();
 
-    private:
-
-        // Handlers
-        void OnClose(wxCloseEvent& event);
-        void OnQuit(wxCommandEvent& event);
-        void OnAbout(wxCommandEvent& event);
-        void OnTreeBeginDrag(wxTreeEvent& event);
-        void OnMarginClick(wxStyledTextEvent& event);
-        void ShowAutoComplete(wxStyledTextEvent& event);
-
-        void CreateMainMenuBar();
-        void CreateMainStatusBar();
-        void CreateHierarchyTab();
-        void CreateOutputLogTab();
-        void CreateOuputMessagesTab();
-        void CreateWelcomeTab();
-        void CreatePropertyTab();
-        void CreateScintillaTab();
-
-        void OutputText(const char *text);
-        void OutputLine(const char *text);
-        void OutputMessage(int type, const char *origin, const char *location, const char *description);
-        void OutputClearAll();
-        void OutputLogClear();
-        void OutputMessagesClear();
-
-        // Identifiers
+                // Identifiers
         static const long id_cutMenuItem;
         static const long id_copyMenuItem;
         static const long id_pasteMenuItem;
@@ -161,6 +134,32 @@ class ENIGMA_IDEFrame: public wxFrame
         wxAuiNotebook* outputAUINotebook;
         wxAuiToolBar* resourcesToolbar;
         wxAuiManager* mainAUIManager;
+
+        void CreateMainMenuBar();
+        void CreateMainStatusBar();
+        void CreateHierarchyTab();
+        void CreateOutputLogTab();
+        void CreateOuputMessagesTab();
+        void CreateWelcomeTab();
+        void CreatePropertyTab();
+        void CreateScintillaTab();
+
+        void OutputText(const char *text);
+        void OutputLine(const char *text);
+        void OutputMessage(int type, const char *origin, const char *location, const char *description);
+        void OutputClearAll();
+        void OutputLogClear();
+        void OutputMessagesClear();
+
+    private:
+
+        // Handlers
+        void OnClose(wxCloseEvent& event);
+        void OnQuit(wxCommandEvent& event);
+        void OnAbout(wxCommandEvent& event);
+        void OnTreeBeginDrag(wxTreeEvent& event);
+        void OnMarginClick(wxStyledTextEvent& event);
+        void ShowAutoComplete(wxStyledTextEvent& event);
 
         DECLARE_EVENT_TABLE()
 };

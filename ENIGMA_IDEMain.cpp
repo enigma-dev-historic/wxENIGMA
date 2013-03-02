@@ -16,6 +16,8 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 
+#include "LoadLibrary.h"
+
 //helper functions
 enum wxbuildinfoformat {
     short_f, long_f };
@@ -211,7 +213,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
 
     CreateOutputLogTab();
     CreateOuputMessagesTab();
-    OutputClearAll();
+    //OutputClearAll();
 
     CreateMainMenuBar();
     CreateMainStatusBar();
@@ -221,6 +223,16 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     CreateWelcomeTab();
     CreateScintillaTab();
     CreateScintillaTab();
+
+    void *result = LoadPluginLib(this);
+    if (result == NULL)
+    {
+        wxMessageDialog (NULL, "Failed to load the compiler library. Have you compiled and built ENIGMA yet?",
+                         "Library Loading Failed", wxOK|wxCENTRE|wxICON_ERROR, wxDefaultPosition).ShowModal();
+        OutputMessage(MSG_ERROR, "Linking", "",
+                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+    }
+
 
     managementAUINotebook->ChangeSelection(0);
     outputAUINotebook->ChangeSelection(0);
@@ -232,7 +244,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
 
 ENIGMA_IDEFrame::~ENIGMA_IDEFrame()
 {
-
+    mainAUIManager->UnInit();
 }
 
 void ENIGMA_IDEFrame::OnQuit(wxCommandEvent& event)
@@ -384,38 +396,53 @@ public:
         wxMenuItem* dirMenuItem;
         wxMenuItem* fileMenuItem;
         wxMenuItem* deleteMenuItem;
+        wxMenuItem* renameMenuItem;
+        wxMenuItem* filextMenuItem;
 
         HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
         : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
         {
-            static const long dirID = wxNewId();
-            static const long fileID = wxNewId();
-            static const long deleteID = wxNewId();
             contextMenu = new wxMenu();
-            dirMenuItem = new wxMenuItem(contextMenu, dirID, _("Create Directory"), _("Create a new file directory."), wxITEM_NORMAL);
+            dirMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Create Directory"), _("Create a new file directory."), wxITEM_NORMAL);
             contextMenu->Append(dirMenuItem);
-            fileMenuItem = new wxMenuItem(contextMenu, fileID, _("Create File"), _("Create a new file."), wxITEM_NORMAL);
+            fileMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Create File"), _("Create a new file."), wxITEM_NORMAL);
             contextMenu->Append(fileMenuItem);
-            deleteMenuItem = new wxMenuItem(contextMenu, deleteID, _("Delete"), _("Delete the file from the project."), wxITEM_NORMAL);
+            deleteMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Delete"), _("Delete the file from the project."), wxITEM_NORMAL);
             contextMenu->Append(deleteMenuItem);
+            renameMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Rename"), _("Rename the file or directory."), wxITEM_NORMAL);
+            contextMenu->Append(renameMenuItem);
+            filextMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Show File Extensions"), _("Hide or show the extensions of files."), wxITEM_NORMAL);
+            contextMenu->Append(filextMenuItem);
 
-            Connect(dirID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateDirectory);
-            Connect(fileID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateFile);
-            Connect(deleteID,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnDelete);
+            Connect(dirMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateDirectory);
+            Connect(fileMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateFile);
+            Connect(deleteMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnDelete);
+            Connect(renameMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnRename);
 
+            Connect(this->GetId(), wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(HierTreeCtrl::OnContextMenu));
             SetSpacing(10);
+        }
+
+        void OnRename()
+        {
+            wxArrayTreeItemIds selItems;
+            GetSelections(selItems);
+            wxTreeItemId selItem = selItems.Item(0);
+            EditLabel(selItem);
         }
 
         void OnCreateDirectory()
         {
             wxTreeItemId rootItem = GetRootItem();
-            AppendDirectory(rootItem, "New Directory");
+            wxTreeItemId newItem = AppendDirectory(rootItem, "New Directory");
+            EditLabel(newItem);
         }
 
         void OnCreateFile()
         {
             wxTreeItemId rootItem = GetRootItem();
-            AppendFile(rootItem, "New File");
+            wxTreeItemId newItem = AppendFile(rootItem, "New File");
+            EditLabel(newItem);
         }
 
         void OnDelete()
@@ -543,7 +570,6 @@ public:
 };
 
 BEGIN_EVENT_TABLE(HierTreeCtrl, wxTreeCtrl)
-EVT_CONTEXT_MENU(HierTreeCtrl::OnContextMenu)
 EVT_TREE_BEGIN_DRAG(wxID_ANY, HierTreeCtrl::OnBeginDrag)
 EVT_TREE_END_DRAG(wxID_ANY, HierTreeCtrl::OnEndDrag)
 END_EVENT_TABLE()
@@ -731,29 +757,28 @@ text->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
 
 void ENIGMA_IDEFrame::CreateOutputLogTab()
 {
-    outputLogCtrl = new wxRichTextCtrl(outputAUINotebook, ID_OUTPUTLOGCTRL, _("Output log will be displayed here when the IDE builds a game.\nfdsgdfg\ndfg\nsd\ngdf\ng"), wxDefaultPosition, wxDefaultSize,
+    outputLogCtrl = new wxRichTextCtrl(outputAUINotebook, ID_OUTPUTLOGCTRL, _("Output log will be displayed here."), wxDefaultPosition, wxDefaultSize,
     wxRE_MULTILINE|wxRE_READONLY|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_OUTPUTLOGCTRL"));
-    wxRichTextAttr rchtxtAttr_1;
-    rchtxtAttr_1.SetLineSpacing(wxTEXT_ATTR_LINE_SPACING_NORMAL);
-    outputLogCtrl->SetBasicStyle(rchtxtAttr_1);
-    wxFont Font_1(8,wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Monospace"),wxFONTENCODING_DEFAULT);
-    outputLogCtrl->SetFont(Font_1);
+    wxRichTextAttr rchtxtAttr;
+    rchtxtAttr.SetLineSpacing(wxTEXT_ATTR_LINE_SPACING_NORMAL);
+    outputLogCtrl->SetBasicStyle(rchtxtAttr);
+    wxFont monoFont(8,wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Monospace"),wxFONTENCODING_DEFAULT);
+    outputLogCtrl->SetFont(monoFont);
     outputAUINotebook->AddPage(outputLogCtrl, _("Log"));
 }
 
 void ENIGMA_IDEFrame::CreateOuputMessagesTab()
 {
-    messagesListView = new wxListView(this);
+    messagesListView = new wxListView(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
     messagesListView->AppendColumn(wxString("Origin"));
     messagesListView->AppendColumn(wxString("Location"));
     messagesListView->AppendColumn(wxString("Description"));
     messagesListView->SetColumnWidth(0, 140);
     messagesListView->SetColumnWidth(1, 100);
     messagesListView->SetColumnWidth(2, 500);
-    messagesListView->SetImageList(hierarchyImageList, wxIMAGE_LIST_NORMAL);
+    messagesListView->SetImageList(hierarchyImageList, wxIMAGE_LIST_SMALL);
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     messagesListView->SetFont(Font_2);
-    //messagesListView->SetSingleStyle(wxLC_HRULES, true);
     outputAUINotebook->AddPage(messagesListView, _("Messages"));
 }
 
@@ -777,14 +802,15 @@ void ENIGMA_IDEFrame::OutputLogClear()
 
 void ENIGMA_IDEFrame::OutputText(const char *text)
 {
-    outputLogCtrl->WriteText(wxString::FromUTF8(text));
+    outputLogCtrl->AppendText(wxString::FromUTF8(text));
     // repaints the control...
     outputLogCtrl->Update();
 }
 
 void ENIGMA_IDEFrame::OutputLine(const char *text)
 {
-    outputLogCtrl->WriteText(wxString::FromUTF8(text) + _T("\n"));
+    outputLogCtrl->AppendText(wxString::FromUTF8(text) + _T("\n"));
+
     // repaints the control...
     outputLogCtrl->Update();
 }
@@ -813,7 +839,9 @@ void ENIGMA_IDEFrame::OutputMessage(int type, const char *origin, const char *lo
             // other
             break;
     }
+
     messagesListView->InsertItem(listItem);
+
     messagesListView->SetItem(id, 0, wxString::FromUTF8(origin));
     messagesListView->SetItem(id, 1, wxString::FromUTF8(location));
     messagesListView->SetItem(id, 2, wxString::FromUTF8(description));

@@ -19,8 +19,9 @@
 			<Target title="Release">
 				<Option output="bin/Release/ENIGMA IDE" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
@@ -37,16 +38,24 @@
 		<Linker>
 			<Add option="`wx-config --version=2.9 --libs html net aui stc propgrid richtext`" />
 		</Linker>
+		<Unit filename="../Resources/ENIGMA_logo.ico">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="ENIGMA_IDEApp.cpp" />
 		<Unit filename="ENIGMA_IDEApp.h" />
 		<Unit filename="ENIGMA_IDEMain.cpp" />
 		<Unit filename="ENIGMA_IDEMain.h" />
+		<Unit filename="ENIGMAlink.cpp" />
+		<Unit filename="ENIGMAlink.h" />
+		<Unit filename="EnigmaCallbacks.h" />
+		<Unit filename="EnigmaStruct.h" />
+		<Unit filename="LoadLibrary.cpp" />
+		<Unit filename="LoadLibrary.h" />
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="../Resources/ENIGMA_logo.ico">
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="syntax_error.cpp" />
+		<Unit filename="syntax_error.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
