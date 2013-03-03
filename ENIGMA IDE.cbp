@@ -5,11 +5,12 @@
 		<Option title="ENIGMA IDE" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="wxENIGMA/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/ENIGMA IDE" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
@@ -21,7 +22,6 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option use_console_runner="0" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
@@ -34,6 +34,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`wx-config --version=2.9 --cxxflags`" />
+			<Add option="-I./enigma/CompilerSource" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --version=2.9 --libs html net aui stc propgrid richtext`" />
@@ -42,13 +43,13 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="ENIGMA_IDEApp.cpp" />
-		<Unit filename="ENIGMA_IDEApp.h" />
+		<Unit filename="ENIGMA_IDEApp.h">
+			<Option virtualFolder="wxENIGMA/" />
+		</Unit>
 		<Unit filename="ENIGMA_IDEMain.cpp" />
 		<Unit filename="ENIGMA_IDEMain.h" />
 		<Unit filename="ENIGMAlink.cpp" />
 		<Unit filename="ENIGMAlink.h" />
-		<Unit filename="EnigmaCallbacks.h" />
-		<Unit filename="EnigmaStruct.h" />
 		<Unit filename="LoadLibrary.cpp" />
 		<Unit filename="LoadLibrary.h" />
 		<Unit filename="resource.rc">

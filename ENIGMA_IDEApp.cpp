@@ -14,6 +14,10 @@
 #include <wx/image.h>
 #include <stdio.h>
 
+#include "ENIGMAlink.h"
+#include "LoadLibrary.h"
+
+
 IMPLEMENT_APP(ENIGMA_IDEApp);
 
 bool ENIGMA_IDEApp::OnInit()
@@ -24,7 +28,7 @@ bool ENIGMA_IDEApp::OnInit()
     {
         wxFileSystem::AddHandler(new wxInternetFSHandler);
     	ENIGMA_IDEFrame* Frame = new ENIGMA_IDEFrame(0);
-        //Frame->SetIcon(wxIcon(_T("./Resources/enigmaicon.ico")));
+        //Frame->SetIcon(wxIcon(_T("Resources/enigmaicon.ico")));
         //Frame->SetIcon(wxICON(aaaa));
     	Frame->Show();
     	SetTopWindow(Frame);

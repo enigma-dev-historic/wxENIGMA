@@ -1,3 +1,5 @@
+
+
 /***************************************************************
  * Name:      ENIGMA_IDEMain.cpp
  * Purpose:   Code for Application Frame
@@ -112,6 +114,8 @@ const long ENIGMA_IDEFrame::id_runMenuItem = wxNewId();
 enum
 {
     MARGIN_LINE_NUMBERS,
+    MARGIN_LINE_BREAKS,
+    MARGIN_LINE_EDITS,
     MARGIN_FOLD
 };
 
@@ -119,11 +123,12 @@ BEGIN_EVENT_TABLE(ENIGMA_IDEFrame, wxFrame)
 
 END_EVENT_TABLE()
 
-ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
+
+ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 {
     Create(parent, wxID_ANY, _("wxENIGMA - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
-    SetClientSize(wxSize(886,465));
-    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
+   SetClientSize(wxSize(886,465));
+  Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
 
     // *** Create Main AUI Managers ***
     mainAUIManager = new wxAuiManager(this, wxAUI_MGR_LIVE_RESIZE|wxAUI_MGR_ALLOW_ACTIVE_PANE|wxAUI_MGR_DEFAULT);
@@ -174,15 +179,15 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     resourcesToolbar = new wxAuiToolBar(this, ID_RESOURCESTOOLBAR, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM22, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/folder_add.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Folder"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM23, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_add.png"))), wxNullBitmap, wxITEM_NORMAL, _("Add External File"), wxEmptyString, NULL);
-    resourcesToolbar->AddTool(ID_AUITOOLBARITEM26, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/3d.png"))), wxNullBitmap, wxITEM_NORMAL, _("New 3D Primitive"), wxEmptyString, NULL);
+    resourcesToolbar->AddTool(ID_AUITOOLBARITEM26, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/model.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Model"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM27, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/images.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sprite"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM15, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/picture.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Image"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM25, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/chart_line.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Path"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM16, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/sound.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sound"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM17, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/font.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Font"), wxEmptyString, NULL);
     resourcesToolbar->AddTool(ID_AUITOOLBARITEM18, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/script.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Script"), wxEmptyString, NULL);
-    resourcesToolbar->AddTool(ID_AUITOOLBARITEM19, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/cog.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Object"), wxEmptyString, NULL);
-    resourcesToolbar->AddTool(ID_AUITOOLBARITEM20, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/map.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Room"), wxEmptyString, NULL);
+    resourcesToolbar->AddTool(ID_AUITOOLBARITEM19, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/object.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Object"), wxEmptyString, NULL);
+    resourcesToolbar->AddTool(ID_AUITOOLBARITEM20, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/map.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Scene"), wxEmptyString, NULL);
     resourcesToolbar->Realize();
     mainAUIManager->AddPane(resourcesToolbar, wxAuiPaneInfo().Name(_T("ResourcesPane")).ToolbarPane().Caption(_("Resources")).Layer(10).Top().Gripper());
 
@@ -199,11 +204,13 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
 
     mainAUIManager->Update();
 
-    hierarchyImageList = new wxImageList(16, 16, 11);
+    hierarchyImageList = new wxImageList(16, 16, 12);
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/notice.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/warning.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/error.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/stop.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
+    hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/folder_open.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/page_white.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/script.png"))));
     hierarchyImageList->Add(wxBitmap(wxImage(_T("Resources/icons/font.png"))));
@@ -215,6 +222,55 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     CreateOuputMessagesTab();
     //OutputClearAll();
 
+
+       void *result = LoadPluginLib(this);
+    if (result == NULL)
+    {
+        wxMessageDialog (NULL, "Failed to load the plugin library. Have you compiled and built ENIGMA yet?",
+                         "Library Loading Failed", wxOK|wxCENTRE|wxICON_ERROR, wxDefaultPosition).ShowModal();
+        OutputMessage(MSG_ERROR, "Linking", "IDE Initialization",
+                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+    }
+            OutputMessage(MSG_NOTICE, "Notice", "IDE Initialization",
+                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+                          OutputMessage(MSG_WARNING, "Warning", "IDE Initialization",
+                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+                          OutputMessage(MSG_ERROR, "Error", "IDE Initialization",
+                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+
+
+    	      definitionsModified("", ((const char*) "%e-yaml\n"
+    "---\n"
+    "treat-literals-as: 0\n"
+    "sample-lots-of-radios: 0\n"
+    "inherit-equivalence-from: 0\n"
+    "sample-checkbox: on\n"
+    "sample-edit: DEADBEEF\n"
+    "sample-combobox: 0\n"
+    "inherit-strings-from: 0\n"
+    "inherit-escapes-from: 0\n"
+    "inherit-increment-from: 0\n"
+    " \n"
+    "target-audio: OpenAL\n"
+    "target-windowing: xlib\n"
+    "target-compiler: gcc\n"
+    "target-graphics: OpenGL\n"
+    "target-widget: None\n"
+    "target-collision: BBox\n"
+    "target-networking: None\n"
+    ));
+
+    /*
+    EnigmaStruct est;
+    est.roomCount = 1;
+    est.filename="test";
+    est.rooms= new Room();
+*/
+
+
+   // compileEGMf(&est, "test.egm", emode_run);
+
+
     CreateMainMenuBar();
     CreateMainStatusBar();
     CreateHierarchyTab();
@@ -223,16 +279,6 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent,wxWindowID id)
     CreateWelcomeTab();
     CreateScintillaTab();
     CreateScintillaTab();
-
-    void *result = LoadPluginLib(this);
-    if (result == NULL)
-    {
-        wxMessageDialog (NULL, "Failed to load the compiler library. Have you compiled and built ENIGMA yet?",
-                         "Library Loading Failed", wxOK|wxCENTRE|wxICON_ERROR, wxDefaultPosition).ShowModal();
-        OutputMessage(MSG_ERROR, "Linking", "",
-                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
-    }
-
 
     managementAUINotebook->ChangeSelection(0);
     outputAUINotebook->ChangeSelection(0);
@@ -378,6 +424,7 @@ void ENIGMA_IDEFrame::CreateMainStatusBar()
     SetStatusBar(mainStatusBar);
 }
 
+
 struct HierTreeItemData: wxTreeItemData {
     bool is_directory = false;
     HierTreeItemData()
@@ -475,7 +522,8 @@ public:
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
             SetItemData(newItem, new HierTreeItemData(true));
-            SetItemImage(newItem, 3, wxTreeItemIcon_Normal);
+            SetItemImage(newItem, 4, wxTreeItemIcon_Normal);
+            SetItemImage(newItem, 5, wxTreeItemIcon_Expanded);
             return newItem;
         }
 
@@ -485,7 +533,7 @@ public:
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
             SetItemData(newItem, new HierTreeItemData(false));
-            SetItemImage(newItem, 4, wxTreeItemIcon_Normal);
+            SetItemImage(newItem, 6, wxTreeItemIcon_Normal);
             return newItem;
         }
 
@@ -584,7 +632,7 @@ void ENIGMA_IDEFrame::CreateHierarchyTab()
     wxFont Font_2(10, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     //hierarchyTreeCtrl->SetFont(Font_2);
     wxTreeItemId hierarchyTreeCtrl_rootItem = hierarchyTreeCtrl->AddRoot(_T("Root Node"));
-    wxTreeItemId hierarchyTreeCtrl_Item2 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Rooms");
+    wxTreeItemId hierarchyTreeCtrl_Item2 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Scenes");
     wxTreeItemId hierarchyTreeCtrl_Item3 = hierarchyTreeCtrl->AppendFile(hierarchyTreeCtrl_Item2, "Room");
     wxTreeItemId hierarchyTreeCtrl_Item4 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_rootItem, "Fonts");
     wxTreeItemId hierarchyTreeCtrl_Item5 = hierarchyTreeCtrl->AppendDirectory(hierarchyTreeCtrl_Item4, "HUD");
@@ -604,15 +652,15 @@ void ENIGMA_IDEFrame::CreateHierarchyTab()
     // Set the images for hierarchyTreeCtrl.
     hierarchyTreeCtrl->SetImageList(hierarchyImageList);
 
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item3, 8, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item6, 6, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item7, 6, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item9, 5, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item10, 5, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item11, 7, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item12, 7, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item13, 7, wxTreeItemIcon_Normal);
-    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item14, 9, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item3, 10, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item6, 8, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item7, 8, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item9, 7, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item10, 7, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item11, 9, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item12, 9, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item13, 9, wxTreeItemIcon_Normal);
+    hierarchyTreeCtrl->SetItemImage(hierarchyTreeCtrl_Item14, 11, wxTreeItemIcon_Normal);
 }
 
 void ENIGMA_IDEFrame::CreateWelcomeTab()
@@ -648,29 +696,50 @@ public:
         : wxStyledTextCtrl(parent, id)
         {
             Connect(wxEVT_STC_MARGINCLICK, wxStyledTextEventHandler(StyledTextCtrl::OnMarginClick), NULL, this);
-            Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(StyledTextCtrl::ShowAutoComplete), NULL, this);
+            Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(StyledTextCtrl::OnAutoComplete), NULL, this);
+            Connect(wxEVT_STC_CHANGE, wxStyledTextEventHandler(StyledTextCtrl::OnChange), NULL, this);
         }
 
-        void ShowAutoComplete(wxStyledTextEvent& event)
+        void OnAutoComplete(wxStyledTextEvent& event)
         {
             AutoCompShow(0, _T("draw_clear draw_line draw_set_color random"));
         }
 
-        void OnMarginClick(wxStyledTextEvent& event)
+        void OnChange(wxStyledTextEvent& event)
         {
-            if (event.GetMargin() == MARGIN_FOLD)
-            {
-                int lineClick = LineFromPosition(event.GetPosition());
-                int levelClick = GetFoldLevel(lineClick);
 
-                if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
-                {
-                    ToggleFold(lineClick);
-                }
-            }
         }
 
-        //DECLARE_EVENT_TABLE()
+        void OnMarginClick(wxStyledTextEvent& event)
+        {
+            int lineClick = LineFromPosition(event.GetPosition());
+            int levelClick = GetFoldLevel(lineClick);
+            switch (event.GetMargin())
+            {
+                case MARGIN_FOLD:
+                    if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
+                    {
+                        ToggleFold(lineClick);
+                    }
+                    break;
+                case MARGIN_LINE_BREAKS:
+                    if (MarkerGet(lineClick) == NULL)
+                    {
+                        MarkerAdd(lineClick, 0);
+                    }
+                    else
+                    {
+                        MarkerDelete(lineClick, 0);
+                    }
+                    break;
+                case MARGIN_LINE_EDITS:
+                    break;
+                case MARGIN_LINE_NUMBERS:
+                    break;
+                default:
+                    break;
+            }
+        }
 
 };
 
@@ -679,19 +748,17 @@ void ENIGMA_IDEFrame::CreateScintillaTab()
 {
     StyledTextCtrl* text;
     text = new StyledTextCtrl(this, wxID_ANY);
-    text->StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour (0, 0, 0) );
-    text->StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour (255, 255, 255));
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     text->StyleSetFont(wxSTC_STYLE_DEFAULT, Font_2);
     text->SetWrapMode (wxSTC_WRAP_NONE);
 
-text->StyleSetBackground(wxSTC_MARK_EMPTY, wxColour (255,0,0));
-text->StyleSetBackground(wxSTC_MARK_BACKGROUND, wxColor(255, 0, 0) );
-text->MarkerSetBackground(MARGIN_FOLD, wxColor(255, 0, 0) );
+    text->StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour (0, 0, 0) );
+    text->StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour (255, 255, 255));
+
     text->StyleClearAll();
-text->MarkerSetBackground(wxSTC_MARK_BOXMINUS, wxColor(255, 0, 0) );
-text->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
-//text->StyleSetForeground(wxSTC_MARK_BACKGROUND, wxColor(255, 0, 0) );
+
+    //text->MarkerSetBackground(wxSTC_MARK_BOXMINUS, wxColor(255, 0, 0) );
+    //ext->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
 
     // caret and selected line
     text->SetCaretForeground(wxColor(0, 0, 0));
@@ -703,15 +770,24 @@ text->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
     //text->StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (239, 229, 220));
     wxFont Font_3(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Monospace"),wxFONTENCODING_DEFAULT);
     text->StyleSetFont(wxSTC_STYLE_LINENUMBER, Font_3);
-    text->SetMarginWidth (MARGIN_LINE_NUMBERS, 50);
+    text->SetMarginWidth (MARGIN_LINE_NUMBERS, 40);
     text->SetMarginType (MARGIN_LINE_NUMBERS, wxSTC_MARGIN_NUMBER);
+
+    // ----- Enable break points
+    text->SetMarginWidth (MARGIN_LINE_BREAKS, 16);
+    text->SetMarginType (MARGIN_LINE_BREAKS, wxSTC_MARGIN_SYMBOL);
+    text->SetMarginSensitive(MARGIN_LINE_BREAKS, true);
+    text->MarkerDefineBitmap(0, wxBitmap(wxImage(_T("Resources/icons/link_break.png"))));
+
+    // ----- Enable line edits
+    text->SetMarginWidth (MARGIN_LINE_EDITS, 0);
+    text->SetMarginType (MARGIN_LINE_EDITS, wxSTC_MARGIN_SYMBOL);
+    text->SetMarginSensitive(MARGIN_LINE_EDITS, true);
 
     // ----- Enable code folding
     text->SetMarginType (MARGIN_FOLD, wxSTC_MARGIN_SYMBOL);
     text->SetMarginWidth(MARGIN_FOLD, 16);
     text->SetMarginMask (MARGIN_FOLD, wxSTC_MASK_FOLDERS);
-
-
     text->SetMarginSensitive(MARGIN_FOLD, true);
 
     // Properties found from http://www.scintilla.org/SciTEDoc.html
@@ -743,10 +819,28 @@ text->MarkerSetBackground(wxSTC_MARK_VLINE, wxColor(255, 0, 0) );
     text->StyleSetForeground (wxSTC_C_COMMENTLINE,       wxColour(0, 130, 0));
     //----- End of styling
 
-    // a sample list of keywords, I haven't included them all to keep it short...
-    text->SetKeyWords(0,
-    wxT("return for while break if var globalvar repeat else mod draw_sprite_part_ext draw_set_color random sprite_get_width sprite_get_height"));
-    text->SetKeyWords(1, wxT("c_yellow c_white argument0 argument1 argument2 argument3 argument4 argument5 argument6 argument7"));
+    const char* currentResource = (const char*) first_available_resource();
+    puts(currentResource);
+    wxString functionKeywords("return for while break if var globalvar repeat else");
+    wxString variableKeywords("argument0 argument1 argument2 argument3 argument4 argument5 argument6 argument7");
+
+    while (!resources_atEnd())
+    {
+        if (resource_isFunction())
+        {
+            functionKeywords.Append(" ");
+            functionKeywords.Append(currentResource);
+        }
+        else
+        {
+            variableKeywords.Append(" ");
+            variableKeywords.Append(currentResource);
+        }
+        currentResource = next_available_resource();
+    }
+
+    text->SetKeyWords(0, functionKeywords);
+    text->SetKeyWords(1, variableKeywords);
 
     text->LoadFile(_T("Resources/examplescript.txt"));
     text->SetSelection(0, 0);

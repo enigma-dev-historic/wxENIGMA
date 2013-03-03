@@ -3,91 +3,91 @@
 int dummy_compileEGMf(EnigmaStruct *es, const char* exe_filename, int mode)
 {
     // show error
-    // return -1;
+    return -1;
 }
 
 const char* dummy_next_available_resource()
 {
     // show error
-    // return -1;
+    return NULL;
 }
 
 const char* dummy_first_available_resource()
 {
     // show error
-    // return -1;
+    return NULL;
 }
 
 bool dummy_resource_isFunction()
 {
     // show error
-    // return -1;
+    return false;
 }
 
 int dummy_resource_argCountMin()
 {
     // show error
-    // return -1;
+    return 0;
 }
 
 int dummy_resource_argCountMax()
 {
     // show error
-    // return -1;
+    return 0;
 }
 
 int dummy_resource_overloadCount()
 {
     // show error
-    // return -1;
+    return 0;
 }
 
 const char* dummy_resource_parameters(int i)
 {
     // show error
-    // return -1;
+    return "()";
 }
 
 int dummy_resource_isTypeName()
 {
     // show error
-    // return -1;
+    return false;
 }
 
 int dummy_resource_isGlobal()
 {
     // show error
-    // return -1;
+    return false;
 }
 
 bool dummy_resources_atEnd()
 {
     // show error
-    // return -1;
+    return true;
 }
 
 const char* dummy_libInit(EnigmaCallbacks* ecs)
 {
     // show error
-    // return -1;
+    return "";
 }
 
 void dummy_libFree()
 {
     // show error
-    // return -1;
 }
 
-syntax_error dummy_definitionsModified(const char* wscode, const char* targetYaml)
+syntax_error dummy_syerr;
+syntax_error *dummy_definitionsModified(const char* wscode, const char* targetYaml)
 {
     // show error
-    // return -1;
+    return &dummy_syerr;
 }
 
-syntax_error dummy_syntaxCheck(int script_count, const char* *script_names, const char* code)
+syntax_error *dummy_syntaxCheck(int script_count, const char* *script_names, const char* code)
 {
     // show error
-    // return -1;
+    return &dummy_syerr;
 }
 
 int (*compileEGMf)(EnigmaStruct *es, const char* exe_filename, int mode) = dummy_compileEGMf;
@@ -103,5 +103,5 @@ int (*resource_isGlobal)() = dummy_resource_isGlobal;
 bool (*resources_atEnd)() = dummy_resources_atEnd;
 const char* (*libInit)(EnigmaCallbacks* ecs) = dummy_libInit;
 void (*libFree)() = dummy_libFree;
-syntax_error (*definitionsModified)(const char* wscode, const char* targetYaml) = dummy_definitionsModified;
-syntax_error (*syntaxCheck)(int script_count, const char* *script_names, const char* code) = dummy_syntaxCheck;
+syntax_error *(*definitionsModified)(const char* wscode, const char* targetYaml) = dummy_definitionsModified;
+syntax_error *(*syntaxCheck)(int script_count, const char* *script_names, const char* code) = dummy_syntaxCheck;

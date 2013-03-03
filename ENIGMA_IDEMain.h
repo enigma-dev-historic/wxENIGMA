@@ -157,9 +157,6 @@ class ENIGMA_IDEFrame: public wxFrame
         void OnClose(wxCloseEvent& event);
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
-        void OnTreeBeginDrag(wxTreeEvent& event);
-        void OnMarginClick(wxStyledTextEvent& event);
-        void ShowAutoComplete(wxStyledTextEvent& event);
 
         DECLARE_EVENT_TABLE()
 };

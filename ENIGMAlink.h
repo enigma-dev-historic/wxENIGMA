@@ -20,11 +20,10 @@ extern int (*resource_overloadCount)(); //Returns the number of times the functi
 extern const char* (*resource_parameters)(int i); //Returns a simple string of parameters and defaults that would serve as the prototype of this function
 extern int (*resource_isTypeName)(); //Returns whether the resource can be used as a typename.
 extern int (*resource_isGlobal)(); //Returns whether the resource is nothing but a global variable.
-extern const char* (*next_available_resource)(); //Returns the name of the next resource on the list, or "" otherwise.
 extern bool (*resources_atEnd)(); //Returns whether we're really done iterating the list
 extern const char* (*libInit)(EnigmaCallbacks* ecs);
 extern void (*libFree)();
-extern syntax_error (*definitionsModified)(const char* wscode, const char* targetYaml);
-extern syntax_error (*syntaxCheck)(int script_count, const char* *script_names, const char* code);
+extern syntax_error* (*definitionsModified)(const char* wscode, const char* targetYaml);
+extern syntax_error* (*syntaxCheck)(int script_count, const char* *script_names, const char* code);
 
 #endif // ENIGMALINK_H_INCLUDED
