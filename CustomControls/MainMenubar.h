@@ -143,7 +143,7 @@ class MainMenubar : public wxMenuBar
 
     void OnQuit(wxCommandEvent& event)
     {
-        Close(true);
+        //frame->Close(true);
     }
 
 };

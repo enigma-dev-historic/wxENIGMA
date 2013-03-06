@@ -136,7 +136,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/warning.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/error.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/link_break.png"))));
-    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/tag.png")), wxBITMAP_TYPE_PNG));
+    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/tag.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/text_superscript.png")), wxBITMAP_TYPE_PNG));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder_open.png"))));
