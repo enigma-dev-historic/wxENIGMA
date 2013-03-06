@@ -5,7 +5,6 @@
 		<Option title="ENIGMA IDE" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="wxENIGMA/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/ENIGMA IDE" prefix_auto="1" extension_auto="1" />
@@ -42,16 +41,20 @@
 		<Unit filename="../Resources/ENIGMA_logo.ico">
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="BuildToolbar.h" />
+		<Unit filename="CodeEditor.h" />
 		<Unit filename="ENIGMA_IDEApp.cpp" />
-		<Unit filename="ENIGMA_IDEApp.h">
-			<Option virtualFolder="wxENIGMA/" />
-		</Unit>
+		<Unit filename="ENIGMA_IDEApp.h" />
 		<Unit filename="ENIGMA_IDEMain.cpp" />
 		<Unit filename="ENIGMA_IDEMain.h" />
 		<Unit filename="ENIGMAlink.cpp" />
 		<Unit filename="ENIGMAlink.h" />
+		<Unit filename="EditToolbar.h" />
+		<Unit filename="Hiearchy.h" />
 		<Unit filename="LoadLibrary.cpp" />
 		<Unit filename="LoadLibrary.h" />
+		<Unit filename="MainMenubar.h" />
+		<Unit filename="ResourceToolbar.h" />
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
