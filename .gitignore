@@ -2,5 +2,5 @@ enigma/*
 *.depend
 *.layout
 *.o
-bin
-obj
+bin/
+obj/
