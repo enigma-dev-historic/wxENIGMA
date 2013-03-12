@@ -34,17 +34,19 @@ ENIGMA_IDEFrame* enigmaFrame;
 //Opens the EnigmaFrame
 static void ede_dia_open() {  }
 //Appends a given text to the frame log
-static void ede_dia_add(const char* text) { enigmaFrame->OutputLine(text); }
+static void ede_dia_add(const char* text) {    enigmaFrame->OutputText(text);     }
 //Clears the frame log
-static void ede_dia_clear() {  }
+static void ede_dia_clear() {}//  wxMutexGuiEnter(); enigmaFrame->OutputClearAll();     wxMutexGuiLeave(); }
 //Sets the progress bar (0-100)
-static void ede_dia_progress(int progress) {  }
+static void ede_dia_progress(int progress) {
+    enigmaFrame->SetProgress(progress);
+}
 //Applies a given text to the progress bar
 static void ede_dia_progress_text(const char* caption) {  }
 //Sets the file from which data is redirected to frame log
-static void ede_output_redirect_file(const char* filepath) {  }
+static void ede_output_redirect_file(const char* filepath) { }// enigmaFrame->OutputLine(filepath); }
 //Indicates file completion, dumps remainder to frame log
-static void ede_output_redirect_reset() {  }
+static void ede_output_redirect_reset() {  }//enigmaFrame->OutputLine("redirect reset"); }
 //Executes a given command, returns errors or ret val
 //static int ede_ide_execute(const char*, const char**, bool) {  }
  //Compresses data. Note image width/height unused

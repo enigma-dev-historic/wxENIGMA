@@ -32,34 +32,69 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`wx-config --version=2.9 --cxxflags`" />
+			<Add option="`wx-config --version=2.9 --cxxflags wxUSE_THREADS = 1`" />
 			<Add option="-I./enigma/CompilerSource" />
+			<Add option="-I." />
+			<Add option="-I./CustomControls" />
+			<Add option="-I./CustomFrames" />
+			<Add option="-I./ProjectClasses" />
+			<Add option="-I./ProjectClasses/ResourceTypes" />
+			<Add option="-I./Plugin" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --version=2.9 --libs html net aui stc propgrid richtext`" />
 		</Linker>
-		<Unit filename="../Resources/ENIGMA_logo.ico">
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="BuildToolbar.h" />
-		<Unit filename="CodeEditor.h" />
+		<Unit filename="CustomControls/BuildToolbar.cpp" />
+		<Unit filename="CustomControls/BuildToolbar.h" />
+		<Unit filename="CustomControls/CodeEditor.cpp" />
+		<Unit filename="CustomControls/CodeEditor.h" />
+		<Unit filename="CustomControls/EditToolbar.cpp" />
+		<Unit filename="CustomControls/EditToolbar.h" />
+		<Unit filename="CustomControls/Hierarchy.cpp" />
+		<Unit filename="CustomControls/Hierarchy.h" />
+		<Unit filename="CustomControls/MainMenubar.cpp" />
+		<Unit filename="CustomControls/MainMenubar.h" />
+		<Unit filename="CustomControls/ResourceToolbar.cpp" />
+		<Unit filename="CustomControls/ResourceToolbar.h" />
+		<Unit filename="CustomFrames/AboutFrame.cpp" />
+		<Unit filename="CustomFrames/AboutFrame.h" />
+		<Unit filename="CustomFrames/Preferences.cpp" />
+		<Unit filename="CustomFrames/Preferences.h" />
+		<Unit filename="CustomFrames/ProjectSettings.cpp" />
+		<Unit filename="CustomFrames/ProjectSettings.h" />
 		<Unit filename="ENIGMA_IDEApp.cpp" />
 		<Unit filename="ENIGMA_IDEApp.h" />
 		<Unit filename="ENIGMA_IDEMain.cpp" />
 		<Unit filename="ENIGMA_IDEMain.h" />
-		<Unit filename="ENIGMAlink.cpp" />
-		<Unit filename="ENIGMAlink.h" />
-		<Unit filename="EditToolbar.h" />
-		<Unit filename="Hiearchy.h" />
-		<Unit filename="LoadLibrary.cpp" />
-		<Unit filename="LoadLibrary.h" />
-		<Unit filename="MainMenubar.h" />
-		<Unit filename="ResourceToolbar.h" />
+		<Unit filename="Plugin/CrossThread.cpp" />
+		<Unit filename="Plugin/CrossThread.h" />
+		<Unit filename="Plugin/ENIGMAlink.cpp" />
+		<Unit filename="Plugin/ENIGMAlink.h" />
+		<Unit filename="Plugin/LoadLibrary.cpp" />
+		<Unit filename="Plugin/LoadLibrary.h" />
+		<Unit filename="Plugin/representation.h" />
+		<Unit filename="Plugin/syntax_error.cpp" />
+		<Unit filename="Plugin/syntax_error.h" />
+		<Unit filename="ProjectClasses/Project.h" />
+		<Unit filename="ProjectClasses/ResourceClasses/Script" />
+		<Unit filename="ProjectClasses/ResourceType.cpp" />
+		<Unit filename="ProjectClasses/ResourceType.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Background.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Font.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Material.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Model.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Object.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Path.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Polygon.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Scene.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Script.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Shader.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Sprite.h" />
+		<Unit filename="ProjectClasses/ResourceTypes/Timeline.h" />
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="syntax_error.cpp" />
-		<Unit filename="syntax_error.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
@@ -69,6 +104,9 @@
 				<gui name="wxWidgets" src="ENIGMA_IDEApp.cpp" main="ENIGMA_IDEFrame" init_handlers="necessary" language="CPP" />
 				<resources>
 					<wxFrame wxs="wxsmith/ENIGMA_IDEframe.wxs" src="ENIGMA_IDEMain.cpp" hdr="ENIGMA_IDEMain.h" name="ENIGMA_IDEFrame" language="CPP" />
+					<wxFrame wxs="wxsmith/AboutFrame.wxs" src="CustomFrames/AboutFrame.cpp" hdr="CustomFrames/AboutFrame.h" name="AboutFrame" language="CPP" />
+					<wxFrame wxs="wxsmith/ProjectSettings.wxs" src="CustomFrames/ProjectSettings.cpp" hdr="CustomFrames/ProjectSettings.h" name="ProjectSettings" language="CPP" />
+					<wxFrame wxs="wxsmith/Preferences.wxs" src="CustomFrames/Preferences.cpp" hdr="CustomFrames/Preferences.h" name="Preferences" language="CPP" />
 				</resources>
 			</wxsmith>
 			<DoxyBlocks>

@@ -1,6 +1,6 @@
 /**
-* @file BuildToolbar.h
-* @brief Header file of the build toolbar.
+* @file Background.h
+* @brief Header file of the background type class.
 *
 * Write a description about the file here...
 *
@@ -21,30 +21,15 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef BUILDTOOLBAR_H_INCLUDED
-#define BUILDTOOLBAR_H_INCLUDED
+#ifndef BACKGROUND_H_INCLUDED
+#define BACKGROUND_H_INCLUDED
 
-class BuildToolbar;
+#include "ResourceType.h"
+#include "backend/EnigmaStruct.h"
 
-#include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
-
-class BuildToolbar : public wxAuiToolBar
+class BackgroundT: public ResourceType
 {
-    public:
-    ENIGMA_IDEFrame* mainFrame;
-
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
-
-    private:
-
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-
+    vector<Background*> backgrounds;
 };
 
-#endif // BUILDTOOLBAR_H_INCLUDED
+#endif // BACKGROUND_H_INCLUDED

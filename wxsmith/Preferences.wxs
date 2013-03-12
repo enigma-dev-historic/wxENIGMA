@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="Preferences">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
+			<pos>272,88</pos>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
+					<pos>166,181</pos>
+				</object>
+				<label>General</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL2" variable="Panel2" member="yes">
+					<pos>149,9</pos>
+				</object>
+				<label>Editors</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL3" variable="Panel3" member="yes">
+					<pos>218,10</pos>
+				</object>
+				<label>Code Editor</label>
+			</object>
+		</object>
+	</object>
+</wxsmith>

@@ -1,6 +1,6 @@
 /**
-* @file BuildToolbar.h
-* @brief Header file of the build toolbar.
+* @file Project.h
+* @brief Header file of the project class.
 *
 * Write a description about the file here...
 *
@@ -21,30 +21,39 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef BUILDTOOLBAR_H_INCLUDED
-#define BUILDTOOLBAR_H_INCLUDED
+#ifndef PROJECT_H_INCLUDED
+#define PROJECT_H_INCLUDED
 
-class BuildToolbar;
+class Project;
 
 #include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
+#include <vector>
+#include <map>
 
-class BuildToolbar : public wxAuiToolBar
+using namespace std;
+
+#include "backend/EnigmaStruct.h"
+#include "Background.h"
+#include "Sprite.h"
+#include "Path.h"
+#include "Scene.h"
+#include "Shader.h"
+#include "Polygon.h"
+#include "Model.h"
+#include "Timeline.h"
+#include "Font.h"
+#include "Script.h"
+#include "Object.h"
+
+class Project
 {
     public:
-    ENIGMA_IDEFrame* mainFrame;
 
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
+    map<wxString, ResourceManager> resources; ///< Vector of all resource types in this project
+    EnigmaStruct* es; ///< Any pre-serialized resources to be passed to the compiler
 
     private:
 
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-
 };
 
-#endif // BUILDTOOLBAR_H_INCLUDED
+#endif // PROJECT_H_INCLUDED

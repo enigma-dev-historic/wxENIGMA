@@ -31,7 +31,6 @@
 #include "ENIGMAlink.h"
 #include "LoadLibrary.h"
 
-
 IMPLEMENT_APP(ENIGMA_IDEApp);
 
 bool ENIGMA_IDEApp::OnInit()

@@ -1,6 +1,6 @@
 /**
-* @file BuildToolbar.h
-* @brief Header file of the build toolbar.
+* @file Model.h
+* @brief Header file of the model type class.
 *
 * Write a description about the file here...
 *
@@ -21,30 +21,15 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef BUILDTOOLBAR_H_INCLUDED
-#define BUILDTOOLBAR_H_INCLUDED
+#ifndef MODEL_H_INCLUDED
+#define MODEL_H_INCLUDED
 
-class BuildToolbar;
+#include "ResourceType.h"
+#include "backend/EnigmaStruct.h"
 
-#include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
-
-class BuildToolbar : public wxAuiToolBar
+class ModelT: public ResourceType
 {
-    public:
-    ENIGMA_IDEFrame* mainFrame;
-
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
-
-    private:
-
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-
+    //vector<Model*> Models;
 };
 
-#endif // BUILDTOOLBAR_H_INCLUDED
+#endif // MODEL_H_INCLUDED
