@@ -1,1 +1,0 @@
-/home/owner/Desktop/wxENIGMA/enigma/Makefile
