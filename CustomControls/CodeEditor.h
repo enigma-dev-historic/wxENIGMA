@@ -24,8 +24,6 @@
 #ifndef CODEEDITOR_H_INCLUDED
 #define CODEEDITOR_H_INCLUDED
 
-class StyledTextCtrl;
-
 #include "ENIGMA_IDEMain.h"
 #include <wx/stc/stc.h>
 
@@ -40,26 +38,82 @@ enum
 class StyledTextCtrl : public wxStyledTextCtrl
 {
     public:
-    ENIGMA_IDEFrame* mainFrame;
-
     wxString* functionWords;
     wxString* variableWords;
     wxString* autoCompWords;
 
-    StyledTextCtrl(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~StyledTextCtrl();
+        StyledTextCtrl(wxWindow* parent, ENIGMA_IDEFrame* frame, const long id = wxID_ANY)
+        : wxStyledTextCtrl(parent, id)
+        {
+            functionWords = &(frame->fncWords);
+            variableWords = &(frame->varWords);
+            autoCompWords = &(frame->acpWords);
 
-    void StyleEDL();
-    void StyleCPP();
-    void StyleXML();
-    void StyleHTML();
-    void Restyle();
+            SetKeyWords(0, *functionWords);
+            SetKeyWords(1, *variableWords);
+            RegisterImage(0, frame->ControlImages->GetBitmap(4));
+            RegisterImage(1, frame->ControlImages->GetBitmap(5));
 
-    private:
+            Connect(wxEVT_STC_MARGINCLICK, wxStyledTextEventHandler(StyledTextCtrl::OnMarginClick), NULL, this);
+            Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(StyledTextCtrl::OnAutoComplete), NULL, this);
+            Connect(wxEVT_STC_CHANGE, wxStyledTextEventHandler(StyledTextCtrl::OnChange), NULL, this);
+        }
 
-    void OnAutoComplete(wxStyledTextEvent& event);
-    void OnChange(wxStyledTextEvent& event);
-    void OnMarginClick(wxStyledTextEvent& event);
+        ~StyledTextCtrl()
+        {
+
+        }
+
+        void OnAutoComplete(wxStyledTextEvent& event)
+        {
+//                this->ImageSetWidth(16);
+
+            if (!AutoCompActive())
+            {
+                AutoCompShow(0, *autoCompWords);
+            }
+            //AutoCompStops(functionKeywords);
+        }
+
+        void OnChange(wxStyledTextEvent& event)
+        {
+//            int lineEdit = event.GetLinesAdded
+            //MarkerAdd(0,0);
+           // cout << lineEdit;
+           // puts("test");
+        }
+
+        void OnMarginClick(wxStyledTextEvent& event)
+        {
+            int lineClick = LineFromPosition(event.GetPosition());
+            int levelClick = GetFoldLevel(lineClick);
+            switch (event.GetMargin())
+            {
+                case MARGIN_FOLD:
+                    if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
+                    {
+                        ToggleFold(lineClick);
+                    }
+                    break;
+                case MARGIN_LINE_BREAKS:
+                    if (MarkerGet(lineClick) == NULL)
+                    {
+                        MarkerAdd(lineClick, 0);
+                    }
+                    else
+                    {
+                        MarkerDelete(lineClick, 0);
+                    }
+                    break;
+                case MARGIN_LINE_EDITS:
+                    break;
+                case MARGIN_LINE_NUMBERS:
+                    break;
+                default:
+                    break;
+            }
+        }
+
 };
 
 

@@ -24,23 +24,16 @@
 #ifndef ENIGMA_IDEMAIN_H
 #define ENIGMA_IDEMAIN_H
 
-class ENIGMA_IDEFrame;
-
 #include "CustomControls/MainMenubar.h"
 #include "CustomControls/EditToolbar.h"
 #include "CustomControls/ResourceToolbar.h"
 #include "CustomControls/BuildToolbar.h"
-#include "CustomControls/Hierarchy.h"
-#include "Project.h"
 #include <stdio.h>
 #include <deque>
-#include <thread>
 using namespace std;
 
 #include <wx/menu.h>
-#include <wx/event.h>
 #include <wx/frame.h>
-#include <wx/gauge.h>
 #include <wx/statusbr.h>
 #include <wx/html/htmlwin.h>
 #include <wx/stc/stc.h>
@@ -53,8 +46,6 @@ using namespace std;
 #include <wx/srchctrl.h>
 #include <wx/aui/aui.h>
 #include <wx/imaglist.h>
-
-#include "CrossThread.h"
 
 enum {
     MSG_NOTICE,
@@ -89,30 +80,23 @@ class ENIGMA_IDEFrame: public wxFrame
         static const long ID_CUSTOM1;
 
         // Declarations
-        std::thread* CompilerThread;
-        vector<Project> openProjects;
-
         wxImageList* ControlImages;
         wxStatusBar* mainStatusBar;
-        wxGauge* progressGauge;
 
         wxHtmlWindow* htmlWelcome;
         wxPropertyGrid* propertyCtrl;
         wxRichTextCtrl* outputLogCtrl;
         wxListView* messagesListView;
-        HierTreeCtrl* hierarchyTreeCtrl;
 
         wxAuiManager* mainAUIManager;
         wxAuiNotebook* editingAUINotebook;
         wxAuiNotebook* managementAUINotebook;
         wxAuiNotebook* outputAUINotebook;
-
         BuildToolbar* buildToolbar;
         EditToolbar* editToolbar;
         wxAuiToolBar* helpToolbar;
         wxAuiToolBar* quickfindToolBar;
         ResourceToolbar* resourcesToolbar;
-        MainMenubar* mainMenuBar;
 
         deque<wxString> functionWords;
         deque<wxString> variableWords;
@@ -135,19 +119,13 @@ class ENIGMA_IDEFrame: public wxFrame
         void OutputClearAll();
         void OutputLogClear();
         void OutputMessagesClear();
-        void SetProgress(int progress);
-        void OnMyEvent(CT_Event& event);
-
-        struct CrossThreadFrame : CrossThread {
-          ENIGMA_IDEFrame* frame;
-          CrossThreadFrame(ENIGMA_IDEFrame *f): frame(f) {}
-        };
 
     private:
 
         // Handlers
         void OnClose(wxCloseEvent& event);
 
+        DECLARE_EVENT_TABLE()
 };
 
 #endif // ENIGMA_IDEMAIN_H

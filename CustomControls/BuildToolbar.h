@@ -24,26 +24,30 @@
 #ifndef BUILDTOOLBAR_H_INCLUDED
 #define BUILDTOOLBAR_H_INCLUDED
 
-class BuildToolbar;
-
-#include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
-
 class BuildToolbar : public wxAuiToolBar
 {
     public:
-    ENIGMA_IDEFrame* mainFrame;
 
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
+    BuildToolbar(wxWindow* parent, const long id = wxID_ANY)
+    : wxAuiToolBar(parent, id, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE)
+    {
 
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/stop_red.png"))), wxNullBitmap, wxITEM_NORMAL, _("Stop"), wxEmptyString, NULL);
+   // EnableTool(ID_AUITOOLBARITEM6, false);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/pause_blue.png"))), wxNullBitmap, wxITEM_NORMAL, _("Pause"), wxEmptyString, NULL);
+  //  EnableTool(ID_AUITOOLBARITEM8, false);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_large_right.png"))), wxNullBitmap, wxITEM_NORMAL, _("Run"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_large_right_orange.png"))), wxNullBitmap, wxITEM_NORMAL, _("Debug"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/application_xp_terminal.png"))), wxNullBitmap, wxITEM_NORMAL, _("Compile"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/controller.png"))), wxNullBitmap, wxITEM_NORMAL, _("Global Game Settings"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/plugin.png"))), wxNullBitmap, wxITEM_NORMAL, _("Game Plugins"), wxEmptyString, NULL);
+    Realize();
+    }
 
-    private:
+    ~BuildToolbar()
+    {
 
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
+    }
 
 };
 

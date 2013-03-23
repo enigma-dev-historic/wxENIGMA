@@ -4,8 +4,3 @@ enigma/*
 *.o
 bin/
 obj/
-blank.txt
-defines.txt
-events.res
-redirfile.txt
-searchdirs.txt
