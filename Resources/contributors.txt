@@ -1,0 +1,5 @@
+Mission Control 
+--------------------------------
+Robert B. Colton : wxENIGMA Project Founder/Leader
+Josh Ventura     : ENIGMA Founder/Leader, parser/engine coder
+IsmAvatar        : LateralGM Founder/Leader

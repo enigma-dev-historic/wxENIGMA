@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="Preferences">
+		<title>Preferences</title>
+		<size>396,374</size>
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<style>wxSTAY_ON_TOP|wxDEFAULT_FRAME_STYLE</style>
+		<handler function="OnClose" entry="EVT_CLOSE" />
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
+					<size>272,289</size>
+					<object class="notebookpage">
+						<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes" />
+						<label>Page name</label>
+					</object>
+					<object class="notebookpage">
+						<object class="wxPanel" name="ID_PANEL2" variable="Panel2" member="yes" />
+						<label>Page name</label>
+					</object>
+					<object class="notebookpage">
+						<object class="wxPanel" name="ID_PANEL3" variable="Panel3" member="yes" />
+						<label>Page name</label>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+							<label>Apply</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+							<label>Cancel</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+			</object>
+		</object>
+	</object>
+</wxsmith>

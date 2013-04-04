@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScintillaNET>
+  <Language Name="enigma">
+    
+    <AutoComplete FillUpCharacters=".([" SingleLineAccept="True" IsCaseSensitive="False">
+      <List>
+        draw_clear draw_set_color draw_line
+      </List>
+    </AutoComplete>
+    
+    <Indentation TabWidth="2" UseTabs="false"/>
+    
+    <Lexer LexerName="cpp" LineCommentPrefix="//" StreamCommentPrefix="/* " StreamCommentSuffix=" */">
+      <Keywords List="0">
+        var for if repeat switch case else end break globalvar return
+      </Keywords>
+      <Keywords List="1">
+        draw_clear draw_set_color draw_line
+      </Keywords>
+    </Lexer>
+    
+    <Styles>
+      <Style Name="DEFAULT" FontName="Courier New" ForeColor="White" BackColor="Black" Size="10"/>
+      <Style Name="LINENUMBER" ForeColor="#C0C0C0" BackColor="#000D1A" Size="8"/>
+      <Style Name="CARET" ForeColor="Red" BackColor="Red" Size="8"/>
+      <Style Name="COMMENT" ForeColor="#80FF00"/>
+      <Style Name="COMMENTLINE" ForeColor="#80FF00"/>
+      <Style Name="OPERATOR" ForeColor="White"/>
+      <Style Name="CHARACTER" ForeColor="White"/>
+      <Style Name="NUMBER" ForeColor="#FF8080"/>
+      <Style Name="WORD" ForeColor="#4BC5E1"/>
+      <Style Name="WORD2" ForeColor="#FFB871"/>
+    </Styles>
+  </Language>
+</ScintillaNET>

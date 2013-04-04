@@ -1,0 +1,5 @@
+This program is licensed under the terms
+of the GNU General Public License version 3
+
+Available online under:
+http://www.gnu.org/licenses/gpl-3.0.html
