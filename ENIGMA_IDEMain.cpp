@@ -23,12 +23,10 @@
 
 #include "ENIGMA_IDEMain.h"
 #include "CustomControls/CodeEditor.h"
-#include "CustomControls/Hiearchy.h"
 #include <wx/msgdlg.h>
 
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/event.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 
@@ -79,10 +77,6 @@ const long ENIGMA_IDEFrame::ID_PROPERTYCTRL = wxNewId();
 const long ENIGMA_IDEFrame::ID_OUTPUTLOGCTRL = wxNewId();
 const long ENIGMA_IDEFrame::ID_MESSAGESLISTVIEW = wxNewId();
 
-BEGIN_EVENT_TABLE(ENIGMA_IDEFrame, wxFrame)
-
-END_EVENT_TABLE()
-
 
 ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 {
@@ -90,15 +84,12 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     SetClientSize(wxSize(900,600));
     SetIcon(wxIcon(_T("Resources/enigmaicon.ico"), wxBITMAP_TYPE_ICO));
     //SetIcon(wxICON(aaaa));
-    Show();
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
 
     // *** Create Main AUI Managers ***
     mainAUIManager = new wxAuiManager(this, wxAUI_MGR_LIVE_RESIZE|wxAUI_MGR_ALLOW_ACTIVE_PANE|wxAUI_MGR_DEFAULT);
     outputAUINotebook = new wxAuiNotebook(this, ID_OUTPUTAUINOTEBOOK, wxDefaultPosition, wxSize(95,431), wxAUI_NB_BOTTOM|wxAUI_NB_DEFAULT_STYLE);
     outputAUINotebook->SetMinSize(wxSize(0,150));
-   // outputAUINotebook->SetUniformBitmapSize(wxDefaultSize);
-   // outputAUINotebook->SetTabCtrlHeight(20);
     mainAUIManager->AddPane(outputAUINotebook, wxAuiPaneInfo().Name(_T("OutputPane")).Caption(_("Output")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().Bottom().BestSize(wxSize(95,431)).MinSize(wxSize(0,150)));
     managementAUINotebook = new wxAuiNotebook(this, ID_MANAGEMENTAUINOTEBOOK, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE);
     managementAUINotebook->SetMinSize(wxSize(200,0));
@@ -124,13 +115,8 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     helpToolbar->AddTool(ID_AUITOOLBARITEM13, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/application_form.png"))), wxNullBitmap, wxITEM_NORMAL, _("Preferences"), wxEmptyString, NULL);
     helpToolbar->Realize();
 
-<<<<<<< HEAD
     quickfindToolbar = new wxAuiToolBar(this, ID_QUICKFINDTOOLBAR, wxPoint(841,8), wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     quickfindToolbar->Realize();
-=======
-    quickfindToolBar = new wxAuiToolBar(this, ID_QUICKFINDTOOLBAR, wxPoint(841,8), wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
-    quickfindToolBar->Realize();
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 
     // *** Add Created Toolbars... ***
     mainAUIManager->AddPane(quickfindToolbar, wxAuiPaneInfo().Name(_T("QuickFind")).ToolbarPane().Caption(_("Quick Find")).Layer(10).Top().Gripper());
@@ -138,24 +124,18 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     mainAUIManager->AddPane(helpToolbar, wxAuiPaneInfo().Name(_T("HelpPane")).ToolbarPane().Caption(_("Help")).Layer(10).Top().Gripper());
     mainAUIManager->AddPane(buildToolbar, wxAuiPaneInfo().Name(_T("BuildPane")).ToolbarPane().Caption(_("Pane caption")).Layer(10).Top().Gripper());
     mainAUIManager->AddPane(editToolbar, wxAuiPaneInfo().Name(_T("EditPane")).ToolbarPane().Caption(_("Edit")).Layer(10).Top().Gripper());
-<<<<<<< HEAD
     mainAUIManager->Update();
 
     mainAUIManager->GetPane(quickfindToolbar).Hide();
 
 //this->
-=======
-
-    mainAUIManager->Update();
-
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
     ControlImages = new wxImageList(16, 16, 14);
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/notice.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/warning.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/error.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/link_break.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/tag.png"))));
-    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/text_superscript.png")), wxBITMAP_TYPE_PNG));
+    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/text_superscript.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder_open.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/page_white.png"))));
@@ -167,6 +147,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 
     CreateOutputLogTab();
     CreateOuputMessagesTab();
+    Show();
     OutputClearAll();
 
     OutputLine("Loading and linking compiler...");
@@ -219,13 +200,13 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
         {
             functionWords.push_back(wxString(currentResource));
             fncWords.Append(currentResource).Append(" ");
-            acpWords.Append(currentResource).Append("?1 ");
+            acpWords.Append(currentResource).Append("?0 ");
         }
         else
         {
             variableWords.push_back(wxString(currentResource));
             varWords.Append(currentResource).Append(" ");
-            acpWords.Append(currentResource).Append("?0 ");
+            acpWords.Append(currentResource).Append("?1 ");
         }
         currentResource = next_available_resource();
     }
@@ -234,8 +215,6 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     CreatePropertyTab();
     mainAUIManager->Update();
     CreateWelcomeTab();
-    CreateScintillaTab();
-    CreateScintillaTab();
 
     managementAUINotebook->ChangeSelection(0);
     outputAUINotebook->ChangeSelection(0);
@@ -283,8 +262,7 @@ void ENIGMA_IDEFrame::ShowPreferencesFrame()
 
 void ENIGMA_IDEFrame::CreateMainMenuBar()
 {
-    wxMenuBar* mainMenuBar;
-    mainMenuBar = new MainMenubar();
+    mainMenuBar = new MainMenubar(this);
     SetMenuBar(mainMenuBar);
 }
 
@@ -293,18 +271,11 @@ void ENIGMA_IDEFrame::CreateMainStatusBar()
     mainStatusbar = new MainStatusbar(this, ID_MAINSTATUSBAR);
     int __wxStatusBarWidths_1[1] = { -1 };
     int __wxStatusBarStyles_1[1] = { wxSB_NORMAL };
-<<<<<<< HEAD
     mainStatusbar->SetFieldsCount(1,__wxStatusBarWidths_1);
     mainStatusbar->SetStatusStyles(1,__wxStatusBarStyles_1);
     SetStatusBar(mainStatusbar);
-=======
-    mainStatusBar->SetFieldsCount(1,__wxStatusBarWidths_1);
-    mainStatusBar->SetStatusStyles(1,__wxStatusBarStyles_1);
-    SetStatusBar(mainStatusBar);
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 }
 
-HierTreeCtrl* hierarchyTreeCtrl;
 void ENIGMA_IDEFrame::CreateHierarchyTab()
 {
    // wxDefaultPosition, wxDefaultSize,
@@ -373,8 +344,9 @@ void ENIGMA_IDEFrame::CreatePropertyTab()
 
 void ENIGMA_IDEFrame::CreateScintillaTab()
 {
+
     StyledTextCtrl* text;
-    text = new StyledTextCtrl(this, this, wxID_ANY);
+    text = new StyledTextCtrl(this, wxID_ANY);
 
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     text->StyleSetFont(wxSTC_STYLE_DEFAULT, Font_2);
@@ -437,21 +409,21 @@ void ENIGMA_IDEFrame::CreateScintillaTab()
 
     // ----- Styling
     text->SetLexer(wxSTC_LEX_CPP);
-    text->StyleSetForeground (wxSTC_CACHE_CARET,            wxColour(255,128,128));
-    text->StyleSetForeground (wxSTC_C_STRING,            wxColour(0,0,255));
-    text->StyleSetForeground (wxSTC_C_NUMBER,            wxColour(0,0,255));
-    text->StyleSetForeground (wxSTC_C_CHARACTER,         wxColour(0,0,255));
-    text->StyleSetForeground (wxSTC_C_WORD,              wxColour(0,102,153));
+    text->StyleSetForeground (wxSTC_CACHE_CARET,         wxColour(255, 128, 128));
+    text->StyleSetForeground (wxSTC_C_STRING,            wxColour(0, 0, 255));
+    text->StyleSetForeground (wxSTC_C_NUMBER,            wxColour(0, 0, 255));
+    text->StyleSetForeground (wxSTC_C_CHARACTER,         wxColour(0, 0, 255));
+    text->StyleSetForeground (wxSTC_C_WORD,              wxColour(0, 102, 153));
     text->StyleSetForeground (wxSTC_C_WORD2,             wxColour(190, 80, 75));
     text->StyleSetForeground (wxSTC_C_COMMENT,           wxColour(0, 130, 0));
     text->StyleSetForeground (wxSTC_C_COMMENTLINE,       wxColour(0, 130, 0));
     //----- End of styling
 
+    text->AutoCompSetAutoHide(true);
+
     text->LoadFile(_T("Resources/examplescript.txt"));
     text->SetSelection(0, 0);
-    editingAUINotebook->AddPage(text, _("Scintilla Tab"), true);
-
-    text->AutoCompSetAutoHide(true);
+    editingAUINotebook->AddPage(text, _("examplescript.txt"), true);
 }
 
 void ENIGMA_IDEFrame::CreateOutputLogTab()
@@ -464,6 +436,7 @@ void ENIGMA_IDEFrame::CreateOutputLogTab()
     wxFont monoFont(8,wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Monospace"),wxFONTENCODING_DEFAULT);
     outputLogCtrl->SetFont(monoFont);
     outputAUINotebook->AddPage(outputLogCtrl, _("Log"));
+    Bind(CROSS_THREAD_CODE, &ENIGMA_IDEFrame::OnMyEvent, this, wxID_ANY);
 }
 
 void ENIGMA_IDEFrame::CreateOuputMessagesTab()
@@ -474,7 +447,7 @@ void ENIGMA_IDEFrame::CreateOuputMessagesTab()
     messagesListView->AppendColumn(wxString("Description"));
     messagesListView->SetColumnWidth(0, 140);
     messagesListView->SetColumnWidth(1, 100);
-    messagesListView->SetColumnWidth(2, 500);
+    messagesListView->SetColumnWidth(2, 600);
     messagesListView->SetImageList(ControlImages, wxIMAGE_LIST_SMALL);
     wxFont Font_2(8, wxSWISS,wxFONTSTYLE_NORMAL,wxNORMAL,false,_T("Courier 10 Pitch"),wxFONTENCODING_DEFAULT);
     messagesListView->SetFont(Font_2);
@@ -497,7 +470,6 @@ void ENIGMA_IDEFrame::OutputLogClear()
     outputLogCtrl->Clear();
     // repaints the control...
     outputLogCtrl->Update();
-<<<<<<< HEAD
 }
 
 void ENIGMA_IDEFrame::OnMyEvent(CT_Event& event)
@@ -537,28 +509,12 @@ struct CTF_SetProgress: ENIGMA_IDEFrame::CrossThreadFrame {
 void ENIGMA_IDEFrame::SetProgress(int progress) {
     wxPostEvent(this, CT_Event(new CTF_SetProgress(this, progress)));
 }
-=======
-}
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 
-void ENIGMA_IDEFrame::OutputText(const char *text)
-{
-    outputLogCtrl->AppendText(wxString::FromUTF8(text));
-    // repaints the control...
-    outputLogCtrl->Update();
-}
 
 void ENIGMA_IDEFrame::OutputLine(const char *text)
 {
-<<<<<<< HEAD
     wxPostEvent(this, CT_Event(new CTF_OutputText(this, text)));
     wxPostEvent(this, CT_Event(new CTF_OutputText(this, "\n")));
-=======
-    outputLogCtrl->AppendText(wxString::FromUTF8(text) + _T("\n"));
-
-    // repaints the control...
-    outputLogCtrl->Update();
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 }
 
 void ENIGMA_IDEFrame::OutputMessage(int type, const char *origin, const char *location, const char *description)

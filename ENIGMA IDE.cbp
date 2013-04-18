@@ -32,13 +32,19 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`wx-config --version=2.9 --cxxflags`" />
+			<Add option="`wx-config --version=2.9 --cxxflags wxUSE_THREADS = 1`" />
 			<Add option="-I./enigma/CompilerSource" />
+			<Add option="-I." />
+			<Add option="-I./CustomControls" />
+			<Add option="-I./CustomFrames" />
+			<Add option="-I./ProjectClasses" />
+			<Add option="-I./ProjectClasses/ResourceTypes" />
+			<Add option="-I./Plugin" />
+			<Add option="-std=c++11" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --version=2.9 --libs html net aui stc propgrid richtext`" />
 		</Linker>
-<<<<<<< HEAD
 		<Unit filename="CustomControls/BuildToolbar.cpp" />
 		<Unit filename="CustomControls/BuildToolbar.h" />
 		<Unit filename="CustomControls/CodeEditor.cpp" />
@@ -59,18 +65,10 @@
 		<Unit filename="CustomFrames/Preferences.h" />
 		<Unit filename="CustomFrames/ProjectSettings.cpp" />
 		<Unit filename="CustomFrames/ProjectSettings.h" />
-=======
-		<Unit filename="../Resources/ENIGMA_logo.ico">
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="BuildToolbar.h" />
-		<Unit filename="CodeEditor.h" />
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 		<Unit filename="ENIGMA_IDEApp.cpp" />
 		<Unit filename="ENIGMA_IDEApp.h" />
 		<Unit filename="ENIGMA_IDEMain.cpp" />
 		<Unit filename="ENIGMA_IDEMain.h" />
-<<<<<<< HEAD
 		<Unit filename="Plugin/CrossThread.cpp" />
 		<Unit filename="Plugin/CrossThread.h" />
 		<Unit filename="Plugin/ENIGMAlink.cpp" />
@@ -96,21 +94,9 @@
 		<Unit filename="ProjectClasses/ResourceTypes/Shader.h" />
 		<Unit filename="ProjectClasses/ResourceTypes/Sprite.h" />
 		<Unit filename="ProjectClasses/ResourceTypes/Timeline.h" />
-=======
-		<Unit filename="ENIGMAlink.cpp" />
-		<Unit filename="ENIGMAlink.h" />
-		<Unit filename="EditToolbar.h" />
-		<Unit filename="Hiearchy.h" />
-		<Unit filename="LoadLibrary.cpp" />
-		<Unit filename="LoadLibrary.h" />
-		<Unit filename="MainMenubar.h" />
-		<Unit filename="ResourceToolbar.h" />
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 		<Unit filename="resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="syntax_error.cpp" />
-		<Unit filename="syntax_error.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
@@ -120,6 +106,9 @@
 				<gui name="wxWidgets" src="ENIGMA_IDEApp.cpp" main="ENIGMA_IDEFrame" init_handlers="necessary" language="CPP" />
 				<resources>
 					<wxFrame wxs="wxsmith/ENIGMA_IDEframe.wxs" src="ENIGMA_IDEMain.cpp" hdr="ENIGMA_IDEMain.h" name="ENIGMA_IDEFrame" language="CPP" />
+					<wxFrame wxs="wxsmith/AboutFrame.wxs" src="CustomFrames/AboutFrame.cpp" hdr="CustomFrames/AboutFrame.h" name="AboutFrame" language="CPP" />
+					<wxFrame wxs="wxsmith/ProjectSettings.wxs" src="CustomFrames/ProjectSettings.cpp" hdr="CustomFrames/ProjectSettings.h" name="ProjectSettings" language="CPP" />
+					<wxFrame wxs="wxsmith/Preferences.wxs" src="CustomFrames/Preferences.cpp" hdr="CustomFrames/Preferences.h" name="Preferences" language="CPP" />
 				</resources>
 			</wxsmith>
 			<DoxyBlocks>

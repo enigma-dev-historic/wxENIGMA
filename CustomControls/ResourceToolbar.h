@@ -24,35 +24,24 @@
 #ifndef RESOURCETOOLBAR_H_INCLUDED
 #define RESOURCETOOLBAR_H_INCLUDED
 
+class ResourceToolbar;
+
+#include "ENIGMA_IDEMain.h"
+#include <wx/aui/aui.h>
+
 class ResourceToolbar : public wxAuiToolBar
 {
     public:
+    ENIGMA_IDEFrame* mainFrame;
 
-    ResourceToolbar(wxWindow* parent, const long id = wxID_ANY)
-    : wxAuiToolBar(parent, id, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE)
-    {
+    wxAuiToolBarItem* createScriptItem;
 
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/folder.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Folder"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_stack.png"))), wxNullBitmap, wxITEM_NORMAL, _("Add External File"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/model.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Model"), wxEmptyString, NULL);
-                AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/material.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Material"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/images.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sprite"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/picture.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Background"), wxEmptyString, NULL);
-                AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/vector.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Vector Shape"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/chart_line.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Path"), wxEmptyString, NULL);
-                        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/film.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Timeline"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/sound.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sound"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/font.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Font"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/script.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Script"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/object.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Object"), wxEmptyString, NULL);
-        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/map.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Scene"), wxEmptyString, NULL);
-        Realize();
-    }
+    ResourceToolbar(ENIGMA_IDEFrame* frame, const long id);
+    virtual ~ResourceToolbar();
 
-    ~ResourceToolbar()
-    {
+    private:
 
-    }
+    void OnCreateScript(wxCommandEvent& event);
 
 };
 

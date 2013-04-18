@@ -1,6 +1,6 @@
 /**
-* @file BuildToolbar.h
-* @brief Header file of the build toolbar.
+* @file LoadLibrary.h
+* @brief Header file of the library interface for linking to the compiler.
 *
 * Write a description about the file here...
 *
@@ -21,32 +21,27 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef BUILDTOOLBAR_H_INCLUDED
-#define BUILDTOOLBAR_H_INCLUDED
+#ifndef LOADLIBRARY_H_INCLUDED
+#define LOADLIBRARY_H_INCLUDED
 
-class BuildToolbar;
+#include <string>
+using namespace std;
 
 #include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
+#include "enigma/CompilerSource/OS_Switchboard.h"
+#include "ENIGMAlink.h"
 
-class BuildToolbar : public wxAuiToolBar
-{
-    public:
-    ENIGMA_IDEFrame* mainFrame;
-
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
-
-    private:
-
-    void OnShow(wxShowEvent& event);
-//    void OnHide(wxHideEvent& event);
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-
+enum {
+  emode_run,
+  emode_debug,
+  emode_design,
+  emode_compile,
+  emode_rebuild
 };
 
-#endif // BUILDTOOLBAR_H_INCLUDED
+typedef void(*GenericFunction)();
+void* LoadPluginLib(ENIGMA_IDEFrame* frame);
+void* FreePluginLib();
+GenericFunction LoadPluginFnc(void *library, string funcname);
+
+#endif // LOADLIBRARY_H_INCLUDED

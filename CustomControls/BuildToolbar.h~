@@ -24,23 +24,9 @@
 #ifndef BUILDTOOLBAR_H_INCLUDED
 #define BUILDTOOLBAR_H_INCLUDED
 
-class BuildToolbar;
-
-#include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
-
 class BuildToolbar : public wxAuiToolBar
 {
     public:
-    ENIGMA_IDEFrame* mainFrame;
-
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
-
-    private:
 
     void OnShow(wxShowEvent& event);
 //    void OnHide(wxHideEvent& event);

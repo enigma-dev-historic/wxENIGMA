@@ -1,6 +1,6 @@
 /**
-* @file BuildToolbar.h
-* @brief Header file of the build toolbar.
+* @file syntax_error.cpp
+* @brief Source file of the syntax_error structure used for the plugin function calls.
 *
 * Write a description about the file here...
 *
@@ -21,32 +21,15 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef BUILDTOOLBAR_H_INCLUDED
-#define BUILDTOOLBAR_H_INCLUDED
+#include "syntax_error.h"
 
-class BuildToolbar;
-
-#include "ENIGMA_IDEMain.h"
-#include <wx/aui/aui.h>
-
-class BuildToolbar : public wxAuiToolBar
+void syntax_error::set(int x, int y, int a, string s)
 {
-    public:
-    ENIGMA_IDEFrame* mainFrame;
+  error_sstring = s;
+  err_str = error_sstring.c_str();
+  line = x, position = y;
+  absolute_index = a;
+}
 
-    wxAuiToolBarItem* stopItem;
-    wxAuiToolBarItem* runItem;
-
-    BuildToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~BuildToolbar();
-
-    private:
-
-    void OnShow(wxShowEvent& event);
-//    void OnHide(wxHideEvent& event);
-    void OnRun(wxCommandEvent& event);
-    void OnStop(wxCommandEvent& event);
-
-};
-
-#endif // BUILDTOOLBAR_H_INCLUDED
+string error_sstring;
+syntax_error ide_passback_error;

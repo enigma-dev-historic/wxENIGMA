@@ -24,34 +24,33 @@
 #ifndef MAINMENUBAR_H_INCLUDED
 #define MAINMENUBAR_H_INCLUDED
 
-<<<<<<< HEAD
 class MainMenubar;
 
 #include "ENIGMA_IDEMain.h"
-=======
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 #include <wx/menu.h>
 
 class MainMenubar : public wxMenuBar
 {
     public:
+    ENIGMA_IDEFrame* mainFrame;
 
     wxMenu* fileMenu;
+    wxMenuItem* newMenuItem;
+    wxMenuItem* openMenuItem;
+    wxMenuItem* saveMenuItem;
+    wxMenuItem* exportMenuItem;
+    wxMenuItem* importMenuItem;
     wxMenuItem* quitMenuItem;
 
     wxMenu* viewMenu;
     wxMenuItem* managementMenuItem;
     wxMenuItem* editingMenuItem;
-<<<<<<< HEAD
     wxMenuItem* outputMenuItem;
     wxMenu* toolbarsMenu;
     wxMenuItem* resourcesToolbarMenuItem;
     wxMenuItem* editToolbarMenuItem;
     wxMenuItem* buildToolbarMenuItem;
     wxMenuItem* helpToolbarMenuItem;
-=======
-    wxMenuItem* outputMenuItem;
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 
     wxMenu* editMenu;
     wxMenuItem* cutMenuItem;
@@ -59,6 +58,9 @@ class MainMenubar : public wxMenuBar
     wxMenuItem* pasteMenuItem;
     wxMenuItem* undoMenuItem;
     wxMenuItem* redoMenuItem;
+    wxMenuItem* selectAllMenuItem;
+    wxMenuItem* commentMenuItem;
+    wxMenuItem* uncommentMenuItem;
 
     wxMenu* buildMenu;
     wxMenuItem* runMenuItem;
@@ -75,93 +77,11 @@ class MainMenubar : public wxMenuBar
     wxMenu* helpMenu;
     wxMenuItem* aboutMenuItem;
 
-<<<<<<< HEAD
     MainMenubar(ENIGMA_IDEFrame* frame);
     virtual ~MainMenubar();
-=======
-    MainMenubar()
-    : wxMenuBar()
-    {
-        // ***** File Menu
-        fileMenu = new wxMenu();
-        quitMenuItem = new wxMenuItem(fileMenu, wxID_ANY, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
-        fileMenu->Append(quitMenuItem);
 
-        Append(fileMenu, _("&File"));
+    private:
 
-        // ***** View Menu
-        viewMenu = new wxMenu();
-        managementMenuItem = new wxMenuItem(viewMenu, wxID_ANY, _("Management"), _("Toggle the management area"), wxITEM_NORMAL);
-        viewMenu->Append(managementMenuItem);
-        editingMenuItem = new wxMenuItem(viewMenu, wxID_ANY, _("Editing"), _("Toggle the editing area"), wxITEM_NORMAL);
-        viewMenu->Append(editingMenuItem);
-        outputMenuItem = new wxMenuItem(viewMenu, wxID_ANY, _("Output"), _("Toggle the output area"), wxITEM_NORMAL);
-        viewMenu->Append(outputMenuItem);
-
-        Append(viewMenu, _("&View"));
-
-        // ***** Edit Menu
-        editMenu = new wxMenu();
-
-        cutMenuItem = new wxMenuItem(editMenu, wxID_ANY, _("&Cut\tCtrl-X"), _("Cut to clipboard"), wxITEM_NORMAL);
-        editMenu->Append(cutMenuItem);
-        copyMenuItem = new wxMenuItem(editMenu, wxID_ANY, _("Cop&y\tCtrl-C"), _("Copy to clipboard"), wxITEM_NORMAL);
-        editMenu->Append(copyMenuItem);
-        pasteMenuItem = new wxMenuItem(editMenu, wxID_ANY, _("&Paste\tCtrl-V"), _("Paste clipboard"), wxITEM_NORMAL);
-        editMenu->Append(pasteMenuItem);
-        undoMenuItem = new wxMenuItem(editMenu, wxID_ANY, _("&Undo\tCtrl-Z"), _("Undo changes"), wxITEM_NORMAL);
-        editMenu->Append(undoMenuItem);
-        redoMenuItem = new wxMenuItem(editMenu, wxID_ANY, _("&Redo\tCtrl-Shift-Z"), _("Redo changes"), wxITEM_NORMAL);
-        editMenu->Append(redoMenuItem);
-
-        Append(editMenu, _("&Edit"));
-
-        // ***** Resources Menu
-        resourcesMenu = new wxMenu();
-
-        Append(resourcesMenu, _("&Resources"));
-
-        // ***** Build Menu
-        buildMenu = new wxMenu();
-
-        runMenuItem = new wxMenuItem(buildMenu, wxID_ANY, _("Execute"), _("Run the game"), wxITEM_NORMAL);
-        buildMenu->Append(runMenuItem);
-        debugMenuItem = new wxMenuItem(buildMenu, wxID_ANY, _("Debug"), _("Debug the game"), wxITEM_NORMAL);
-        buildMenu->Append(debugMenuItem);
-
-        Append(buildMenu, _("&Build"));
-
-        // ***** Options Menu
-        optionsMenu = new wxMenu();
-        settingsMenuItem = new wxMenuItem(optionsMenu, wxID_ANY, _("Global Game Settings"), _("Settings for the current game"), wxITEM_NORMAL);
-        optionsMenu->Append(settingsMenuItem);
-        preferencesMenuItem = new wxMenuItem(optionsMenu, wxID_ANY, _("Preferences"), _("Editor Preferences"), wxITEM_NORMAL);
-        optionsMenu->Append(preferencesMenuItem);
-        Append(optionsMenu, _("&Options"));
-
-        // ***** Help Menu
-        helpMenu = new wxMenu();
-        aboutMenuItem = new wxMenuItem(helpMenu, wxID_ANY, _("About\tF1"), _("Show info about this application"), wxITEM_NORMAL);
-        helpMenu->Append(aboutMenuItem);
-        Append(helpMenu, _("&Help"));
-
-        Connect(quitMenuItem->GetId(),wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainMenubar::OnQuit);
-        Connect(aboutMenuItem->GetId(),wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainMenubar::OnAbout);
-    }
-
-    ~MainMenubar()
-    {
-
-    }
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
-
-    void OnAbout(wxCommandEvent& event)
-    {
-        //wxString msg = wxbuildinfo(long_f);
-        //wxMessageBox(msg, _("Welcome to..."));
-    }
-
-<<<<<<< HEAD
     void OnEditToolbar(wxCommandEvent& event);
     void OnResourcesToolbar(wxCommandEvent& event);
     void OnHelpToolbar(wxCommandEvent& event);
@@ -172,12 +92,6 @@ class MainMenubar : public wxMenuBar
     void OnAbout(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
-=======
-    void OnQuit(wxCommandEvent& event)
-    {
-        //frame->Close(true);
-    }
->>>>>>> 07a11a709482c602e3906998d59d940f39e471e7
 
 };
 
