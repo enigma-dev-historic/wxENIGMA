@@ -1,6 +1,6 @@
 /**
-* @file Hierarchy.cpp
-* @brief Source file of the project hierarchy viewer.
+* @file Hierarchy.h
+* @brief Header file of the project hierarchy viewer.
 *
 * Write a description about the file here...
 *
@@ -21,30 +21,47 @@
 * wxENIGMA. If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#include "Hierarchy.h"
+#ifndef HIEARCHY_H_INCLUDED
+#define HIEARCHY_H_INCLUDED
 
-        HierTreeCtrl::HierTreeCtrl(wxWindow* parent, const long id)
+#include "ENIGMA_IDEMain.h"
+#include <wx/treectrl.h>
+
+struct HierTreeItemData: wxTreeItemData {
+    bool is_directory = false;
+    HierTreeItemData()
+    {
+    }
+    HierTreeItemData(bool dir): is_directory(dir)
+    {
+    }
+};
+
+class HierTreeCtrl : public wxTreeCtrl
+{
+public:
+        wxArrayTreeItemIds draggedItems;
+        wxMenu* contextMenu;
+        wxMenuItem* dirMenuItem;
+        wxMenuItem* fileMenuItem;
+        wxMenuItem* deleteMenuItem;
+        wxMenuItem* renameMenuItem;
+        wxMenuItem* filextMenuItem;
+
+        HierTreeCtrl(wxWindow* parent, const long id = wxID_ANY)
         : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
         {
-
             contextMenu = new wxMenu();
             dirMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Create Directory"), _("Create a new file directory."), wxITEM_NORMAL);
             contextMenu->Append(dirMenuItem);
-            resourceMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Create Resource"), _("Create a new resource in the project."), wxITEM_NORMAL);
-            contextMenu->Append(resourceMenuItem);
-            fileMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Add Files"), _("Add external files to the project."), wxITEM_NORMAL);
+            fileMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Create File"), _("Create a new file."), wxITEM_NORMAL);
             contextMenu->Append(fileMenuItem);
-            editMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Edit"), _("Edit the file or resource."), wxITEM_NORMAL);
-            contextMenu->Append(editMenuItem);
-            renameMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Rename"), _("Rename the file or directory."), wxITEM_NORMAL);
-            contextMenu->Append(renameMenuItem);
             deleteMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Delete"), _("Delete the file from the project."), wxITEM_NORMAL);
             contextMenu->Append(deleteMenuItem);
+            renameMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Rename"), _("Rename the file or directory."), wxITEM_NORMAL);
+            contextMenu->Append(renameMenuItem);
             filextMenuItem = new wxMenuItem(contextMenu, wxNewId(), _("Show File Extensions"), _("Hide or show the extensions of files."), wxITEM_NORMAL);
             contextMenu->Append(filextMenuItem);
-
-            Connect(this->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, (wxObjectEventFunction)&HierTreeCtrl::OnBeginDrag);
-            Connect(this->GetId(), wxEVT_COMMAND_TREE_END_DRAG, (wxObjectEventFunction)&HierTreeCtrl::OnEndDrag);
 
             Connect(dirMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateDirectory);
             Connect(fileMenuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&HierTreeCtrl::OnCreateFile);
@@ -55,7 +72,7 @@
             SetSpacing(10);
         }
 
-        void HierTreeCtrl::OnRename()
+        void OnRename()
         {
             wxArrayTreeItemIds selItems;
             GetSelections(selItems);
@@ -63,26 +80,26 @@
             EditLabel(selItem);
         }
 
-        void HierTreeCtrl::OnCreateDirectory()
+        void OnCreateDirectory()
         {
             wxTreeItemId rootItem = GetRootItem();
             wxTreeItemId newItem = AppendDirectory(rootItem, "New Directory");
             EditLabel(newItem);
         }
 
-        void HierTreeCtrl::OnCreateFile()
+        void OnCreateFile()
         {
             wxTreeItemId rootItem = GetRootItem();
             wxTreeItemId newItem = AppendFile(rootItem, "New File");
             EditLabel(newItem);
         }
 
-        void HierTreeCtrl::OnDelete()
+        void OnDelete()
         {
             GetSelections(draggedItems);
             wxTreeItemId item;
 
-            for (size_t i = 0; i < draggedItems.GetCount(); ++i)
+            for (int i = 0; i < draggedItems.GetCount(); i++)
             {
                 item = draggedItems.Item(i);
                 if (item == GetRootItem() || item == NULL)
@@ -95,14 +112,14 @@
             draggedItems.Clear();
         }
 
-        bool HierTreeCtrl::ItemIsAncestor(wxTreeItemId& ancestor, wxTreeItemId& descendant) {
+        bool ItemIsAncestor(wxTreeItemId& ancestor, wxTreeItemId& descendant) {
             if (ancestor == descendant) return true;
             if (descendant == GetRootItem()) return false;
             wxTreeItemId parent = GetItemParent(descendant);
             return ItemIsAncestor(ancestor, parent);
         }
 
-        wxTreeItemId HierTreeCtrl::AppendDirectory(wxTreeItemId& destination, const char *text)
+        wxTreeItemId AppendDirectory(wxTreeItemId& destination, const char *text)
         {
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
@@ -113,7 +130,7 @@
         }
 
 
-        wxTreeItemId HierTreeCtrl::AppendFile(wxTreeItemId& destination, const char *text)
+        wxTreeItemId AppendFile(wxTreeItemId& destination, const char *text)
         {
             wxTreeItemId newItem;
             newItem = AppendItem(destination, wxString::FromUTF8(text));
@@ -122,7 +139,7 @@
             return newItem;
         }
 
-        wxTreeItemId HierTreeCtrl::MoveItem(wxTreeItemId& source, wxTreeItemId& destination, wxTreeItemId& parent)
+        wxTreeItemId MoveItem(wxTreeItemId& source, wxTreeItemId& destination, wxTreeItemId& parent)
         {
             wxTreeItemId newItem;
             if (parent != destination)
@@ -132,7 +149,7 @@
             }
             else
             {
-                newItem = AppendItem(parent, GetItemText(source), GetItemImage(source), -1,
+                newItem = AppendItem(destination, GetItemText(source), GetItemImage(source), -1,
                                     new HierTreeItemData(*(HierTreeItemData*)GetItemData(source)));
             }
 
@@ -149,35 +166,37 @@
             return newItem;
         }
 
-        wxTreeItemId HierTreeCtrl::MoveItem(wxTreeItemId& source, wxTreeItemId& destination)
+        wxTreeItemId MoveItem(wxTreeItemId& source, wxTreeItemId& destination)
         {
             wxTreeItemId parent = GetItemParent(destination);
-            return MoveItem(source, destination, parent);
+            MoveItem(source, destination, parent);
         }
 
-        void HierTreeCtrl::OnContextMenu(wxMouseEvent& event)
+        DECLARE_EVENT_TABLE()
+
+        void OnContextMenu(wxMouseEvent& event)
         {
                 wxPoint clientpt = event.GetPosition();
-                //wxPoint screenpt = ScreenToClient(clientpt);
+                wxPoint screenpt = ScreenToClient(clientpt);
                 //event.Allow();
                 PopupMenu(contextMenu, clientpt.x, clientpt.y);
         }
 
-        void HierTreeCtrl::OnBeginDrag(wxTreeEvent& event)
+        void OnBeginDrag(wxTreeEvent& event)
         {
                 GetSelections(draggedItems);
 
-                //wxPoint clientpt = event.GetPoint();
-                //wxPoint screenpt = ClientToScreen(clientpt);
+                wxPoint clientpt = event.GetPoint();
+                wxPoint screenpt = ClientToScreen(clientpt);
                 event.Allow();
         }
 
-        void HierTreeCtrl::OnEndDrag(wxTreeEvent& event)
+        void OnEndDrag(wxTreeEvent& event)
         {
             wxTreeItemId itemSrc, itemDst = event.GetItem();
 
 
-            for (size_t i = 0; i < draggedItems.GetCount(); ++i)
+            for (int i = 0; i < draggedItems.GetCount(); i++)
             {
                 itemSrc = draggedItems.Item(i);
                 if (itemDst == NULL || itemSrc == NULL || itemDst == itemSrc ||
@@ -198,3 +217,11 @@
 
             draggedItems.Clear();
         }
+};
+
+BEGIN_EVENT_TABLE(HierTreeCtrl, wxTreeCtrl)
+EVT_TREE_BEGIN_DRAG(wxID_ANY, HierTreeCtrl::OnBeginDrag)
+EVT_TREE_END_DRAG(wxID_ANY, HierTreeCtrl::OnEndDrag)
+END_EVENT_TABLE()
+
+#endif // HIEARCHY_H_INCLUDED

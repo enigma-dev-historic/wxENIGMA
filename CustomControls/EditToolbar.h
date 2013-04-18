@@ -24,25 +24,35 @@
 #ifndef EDITTOOLBAR_H_INCLUDED
 #define EDITTOOLBAR_H_INCLUDED
 
-class EditToolbar;
-
-#include "ENIGMA_IDEMain.h"
 #include <wx/aui/aui.h>
 
 class EditToolbar : public wxAuiToolBar
 {
     public:
-    ENIGMA_IDEFrame* mainFrame;
 
-    wxAuiToolBarItem* codeCompItem;
-    wxAuiToolBarItem* intellisenseItem;
+    EditToolbar(wxWindow* parent, const long id = wxID_ANY)
+    : wxAuiToolBar(parent, id, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE)
+    {
 
-    EditToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
-    virtual ~EditToolbar();
+        AddTool(wxID_ANY, _("Save"), wxBitmap(wxImage(_T("Resources/icons/disk.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save"), wxEmptyString, NULL);
+        AddTool(wxID_ANY, _("SaveAll"), wxBitmap(wxImage(_T("Resources/icons/disk_multiple.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save All"), wxEmptyString, NULL);
+        AddSeparator();
+        AddTool(wxID_ANY, _("Cut"), wxBitmap(wxImage(_T("Resources/icons/cut.png"))), wxNullBitmap, wxITEM_NORMAL, _("Cut"), wxEmptyString, NULL);
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_copy.png"))), wxNullBitmap, wxITEM_NORMAL, _("Copy"), wxEmptyString, NULL);
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_paste.png"))), wxNullBitmap, wxITEM_NORMAL, _("Pase"), wxEmptyString, NULL);
+        AddSeparator();
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_undo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Undo"), wxEmptyString, NULL);
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_redo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Redo"), wxEmptyString, NULL);
+        AddSeparator();
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))), wxNullBitmap, wxITEM_CHECK, _("Code Completion"), wxEmptyString, NULL);
+        AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/spellcheck.png"))), wxNullBitmap, wxITEM_CHECK, _("Intellisense"), wxEmptyString, NULL);
+        Realize();
+    }
 
-    private:
+    ~EditToolbar()
+    {
 
-   // DECLARE_EVENT_TABLE()
+    }
 
 };
 
