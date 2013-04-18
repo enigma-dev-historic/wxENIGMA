@@ -24,6 +24,7 @@
 #ifndef SPRITE_H_INCLUDED
 #define SPRITE_H_INCLUDED
 
+//#include "APNG.h"
 #include "ResourceType.h"
 #include "backend/EnigmaStruct.h"
 

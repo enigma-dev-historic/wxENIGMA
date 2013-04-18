@@ -78,6 +78,7 @@
 		<Unit filename="Plugin/representation.h" />
 		<Unit filename="Plugin/syntax_error.cpp" />
 		<Unit filename="Plugin/syntax_error.h" />
+		<Unit filename="ProjectClasses/APNG.h" />
 		<Unit filename="ProjectClasses/Project.h" />
 		<Unit filename="ProjectClasses/ResourceType.cpp" />
 		<Unit filename="ProjectClasses/ResourceType.h" />

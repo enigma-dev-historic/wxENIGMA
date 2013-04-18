@@ -32,21 +32,23 @@ EditToolbar::EditToolbar(ENIGMA_IDEFrame* frame, const long id)
 {
     mainFrame = frame;
 
-    AddTool(wxID_ANY, _("Save"), wxBitmap(wxImage(_T("Resources/icons/disk.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("SaveAll"), wxBitmap(wxImage(_T("Resources/icons/disk_multiple.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save All"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("New Project"), wxBitmap(wxImage(_T("Resources/icons/application_add.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Project"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Open Project"), wxBitmap(wxImage(_T("Resources/icons/folder_open.png"))), wxNullBitmap, wxITEM_NORMAL, _("Open Project"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Save"), wxBitmap(wxImage(_T("Resources/icons/save.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("SaveAll"), wxBitmap(wxImage(_T("Resources/icons/saveall.png"))), wxNullBitmap, wxITEM_NORMAL, _("Save All"), wxEmptyString, NULL);
     AddSeparator();
     AddTool(wxID_ANY, _("Cut"), wxBitmap(wxImage(_T("Resources/icons/cut.png"))), wxNullBitmap, wxITEM_NORMAL, _("Cut"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_copy.png"))), wxNullBitmap, wxITEM_NORMAL, _("Copy"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_paste.png"))), wxNullBitmap, wxITEM_NORMAL, _("Pase"), wxEmptyString, NULL);
     AddSeparator();
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_undo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Undo"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_redo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Redo"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/undo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Undo"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/redo.png"))), wxNullBitmap, wxITEM_NORMAL, _("Redo"), wxEmptyString, NULL);
     AddSeparator();
-    codeCompItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))), wxNullBitmap, wxITEM_CHECK, _("Code Completion"), wxEmptyString, NULL);
-    intellisenseItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/spellcheck.png"))), wxNullBitmap, wxITEM_CHECK, _("Intellisense"), wxEmptyString, NULL);
+    //codeCompItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))), wxNullBitmap, wxITEM_CHECK, _("Code Completion"), wxEmptyString, NULL);
+    intellisenseItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/beaker.png"))), wxNullBitmap, wxITEM_CHECK, _("Intellisense"), wxEmptyString, NULL);
     Realize();
 
-    ToggleTool(codeCompItem->GetId(), true);
+    //ToggleTool(codeCompItem->GetId(), true);
     ToggleTool(intellisenseItem->GetId(), true);
 }
 

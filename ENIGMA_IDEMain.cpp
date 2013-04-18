@@ -80,9 +80,9 @@ const long ENIGMA_IDEFrame::ID_MESSAGESLISTVIEW = wxNewId();
 
 ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 {
-    Create(parent, wxID_ANY, _("wxENIGMA - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
+    Create(parent, wxID_ANY, _("ENIGMA Development Environment - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     SetClientSize(wxSize(900,600));
-    SetIcon(wxIcon(_T("Resources/wxenigmalogo.ico"), wxBITMAP_TYPE_ICO));
+    SetIcon(wxIcon(_T("Resources/enigmaicon.ico"), wxBITMAP_TYPE_ICO));
     //SetIcon(wxICON(aaaa));
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&ENIGMA_IDEFrame::OnClose);
 
@@ -139,10 +139,10 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/folder_open.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/page_white.png"))));
-    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/script.png"))));
-    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/font.png"))));
+    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))));
+    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/style.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/picture.png"))));
-    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/map.png"))));
+    ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/room.png"))));
     ControlImages->Add(wxBitmap(wxImage(_T("Resources/icons/sound.png"))));
 
     CreateOutputLogTab();
@@ -182,7 +182,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     "target-audio: OpenAL\n"
     "target-windowing: xlib\n"
     "target-compiler: gcc\n"
-    "target-graphics: OpenGL\n"
+    "target-graphics: OpenGL1\n"
     "target-widget: None\n"
     "target-collision: BBox\n"
     "target-networking: None\n"

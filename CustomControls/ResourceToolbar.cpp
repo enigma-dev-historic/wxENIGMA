@@ -27,20 +27,20 @@ ResourceToolbar::ResourceToolbar(ENIGMA_IDEFrame* frame, const long id)
 : wxAuiToolBar(frame, id, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE)
 {
     mainFrame = frame;
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/folder.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Folder"), wxEmptyString, NULL);
+    //AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/folder.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Folder"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_stack.png"))), wxNullBitmap, wxITEM_NORMAL, _("Add External File"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/model.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Model"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/material.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Material"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/images.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sprite"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/picture.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Background"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/vector.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Vector Shape"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/chart_line.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Path"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/film.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Timeline"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/pacman.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sprite"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/background.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Background"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/polygon.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Polygon"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/path.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Path"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/timeline.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Timeline"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/sound.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Sound"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/font.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Font"), wxEmptyString, NULL);
-    createScriptItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/script.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Script"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/style.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Font"), wxEmptyString, NULL);
+    createScriptItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Script"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/object.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Object"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/map.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Scene"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/room.png"))), wxNullBitmap, wxITEM_NORMAL, _("New Scene"), wxEmptyString, NULL);
     Realize();
     Update();
 

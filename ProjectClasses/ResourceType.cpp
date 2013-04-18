@@ -1,3 +1,3 @@
 #include "ResourceType.h"
 
-//vector<ResourceType*> ResourceTypes;
+vector<ResourceType*> ResourceTypes;

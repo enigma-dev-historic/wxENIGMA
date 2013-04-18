@@ -32,12 +32,12 @@ BuildToolbar::BuildToolbar(ENIGMA_IDEFrame* frame, const long id)
 
     stopItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/stop_red.png"))), wxNullBitmap, wxITEM_NORMAL, _("Stop"), wxEmptyString, NULL);
    // EnableTool(stopItem->GetId(), false);
-DeleteTool(stopItem->GetId());
+//DeleteTool(stopItem->GetId());
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/pause_blue.png"))), wxNullBitmap, wxITEM_NORMAL, _("Pause"), wxEmptyString, NULL);
   //  EnableTool(ID_AUITOOLBARITEM8, false);
-    runItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/arrow_large_right.png"))), wxNullBitmap, wxITEM_NORMAL, _("Run"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/beaker.png"))), wxNullBitmap, wxITEM_NORMAL, _("Debug"), wxEmptyString, NULL);
-    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/application_xp_terminal.png"))), wxNullBitmap, wxITEM_NORMAL, _("Compile"), wxEmptyString, NULL);
+    runItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/run.png"))), wxNullBitmap, wxITEM_NORMAL, _("Run"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/debug.png"))), wxNullBitmap, wxITEM_NORMAL, _("Debug"), wxEmptyString, NULL);
+    AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/application_put.png"))), wxNullBitmap, wxITEM_NORMAL, _("Compile"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/cog.png"))), wxNullBitmap, wxITEM_NORMAL, _("Project Settings"), wxEmptyString, NULL);
     AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/plugin.png"))), wxNullBitmap, wxITEM_NORMAL, _("Game Plugins"), wxEmptyString, NULL);
     Realize();
@@ -81,7 +81,7 @@ void Compile(void)
     rms[0].drawBackgroundColor = true;
     rms[0].width = 500;
     rms[0].height=500;
-    rms[0].creationCode = "show_message('hello world')";
+    rms[0].creationCode = "";
     rms[0].name = "exampleroom";
     rms[0].id = 0543;
     rms[0].speed = 30;

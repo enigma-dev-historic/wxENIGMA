@@ -1,5 +1,51 @@
-Mission Control 
--------------------------------------------------------------------------------
-Robert B. Colton : wxENIGMA Project Founder/Leader
-Josh Ventura     : ENIGMA Founder/Leader, parser/engine coder
-IsmAvatar        : LateralGM Founder/Leader
+Mission Control
+--------------------------------------------
+Josh Ventura: Started the ENIGMA project. Primary developer; wrote most major systems including the parsers.
+
+IsmAvatar: Started the LateralGM project. Also wrote the XLib code that enables ENIGMA to work on Linux, a BBox-based collision system, and a Berkeley sockets-based networking system for ENIGMA. Sponsored a large portion of the funds to getting a dedicated server for the project.
+
+Robert B Colton: Works on the core game engine of the compiler, designer of this Wiki and has documented it allot, also the lead developer of the wxENIGMA cross-platform alternative to LateralGM.
+
+The Architects
+--------------------------------------------
+TGMG: Wrote a large number of ports for ENIGMA to different operating systems, including Android and iPhone. Helped kick off some resources, including backgrounds.
+
+Harijs Grīnbergs: Completed the set of sprite functions, the majority of the background functions, path functions, surfaces using fbo and most of the draw_text_* functions.
+
+Polygone: Forum administrator and a main wiki administrator. Actively involved in ENIGMA development. Likes to bug test/debug and contribute towards full GM compatibility. Aims to set ENIGMA in stride for world domination.
+
+Forthevin: Has fixed various problematic issues in ENIGMA and implemented several major systems including pixel perfect collisions, and the particle system.
+
+Web Developers/Graphics Artists
+--------------------------------------------
+a2h: Site creator, manager and designer. He claims to be able to dream in code (although it's highly doubted).
+
+Gary "MahFreenAmeh" Warman: sysadmin, web dev, music connoisseur, hacker d-luxe; ready for work at any time. Designed several components of the site that "just needed to work".
+
+Zane "Obelisk": The god of the original ENIGMA logo (A PNG version of the current vector).
+
+Mitch: Works on the ENIGMA Community (the one with the blogs and games). He also made the original version of the bugtracker.
+
+Lasse "fede-lasse" Klarlund: Designed an ENIGMA resource pack for free use.
+
+Owen "Zekian" Delahoy: The blogs and games side of the ENIGMA Community is also improved on by Owen, who lovingly(?) squeezes more goodness out of it.
+
+Noodle: Redesigned the third iteration of the ENIGMA site design. This design, the fourth one, retains only one thing from his redesign. The text color.
+
+Sir Xemic/C-Ator9: Designed the original ENIGMA ambigram
+
+Juju: Potential author of the help file.
+
+Desperados
+--------------------------------------------
+Dazappa 	Contributed a Java-written e-YAML parser so IsmAvatar could read ENIGMA's ey files. Also fixed a few LateralGM tasks/bugs.
+RetroX 	Contributed a few movement functions and designed Linux install packages.
+Datzach 	Went through a phrase of adding a load of remaining GM functions, mainly Winapi related functions for Windows.
+r9k 	Author of ENIGMA's soon-to-exist polygon-based collision system.
+Dave 	Contributed the skeleton of the surface system, as well as a dysfunctional font system he wrote without compiling it even once. Quite impressive.
+Serprex 	A brilliant coder, knowing all there is to know about optimization. His sense of motivation is screwy, and he has screwed some functions up (which Josh will remember always), but he's redone several key functions.
+Rusky 	The poor guy who got datastacks pushed onto him. (Pun) Though he did finish stacks, the rest are yet to be done (So they'll probably be redone by someone else). Rusky strives to keep everyone else in line.
+Sir Xemic/C-Ator9 	Drafted several mathy functions in GML, including draw_ellipse, draw_roundrect, and make_color_hsv.
+Lasse "fede-lasse" Klarlund 	Contributed small strings of functions here and there.
+Cheeseboy 	cheeseboy (noun): One fat cheeseball that relentlessly tortures unwilling victims (josh) into submission until they get what they want. Often ideal for parser testing due to their horrendous coding habits.
+Everyone else 	Thank you for all the help! 
