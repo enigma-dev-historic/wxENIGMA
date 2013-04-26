@@ -36,12 +36,14 @@ class EditToolbar : public wxAuiToolBar
 
     wxAuiToolBarItem* codeCompItem;
     wxAuiToolBarItem* intellisenseItem;
+    wxAuiToolBarItem* findReplaceItem;
 
     EditToolbar(ENIGMA_IDEFrame* frame, const long id = wxID_ANY);
     virtual ~EditToolbar();
 
     private:
 
+    void OnFindReplace(wxCommandEvent& event);
    // DECLARE_EVENT_TABLE()
 
 };

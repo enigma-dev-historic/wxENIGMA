@@ -46,10 +46,15 @@ EditToolbar::EditToolbar(ENIGMA_IDEFrame* frame, const long id)
     AddSeparator();
     //codeCompItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/page_white_code.png"))), wxNullBitmap, wxITEM_CHECK, _("Code Completion"), wxEmptyString, NULL);
     intellisenseItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/beaker.png"))), wxNullBitmap, wxITEM_CHECK, _("Intellisense"), wxEmptyString, NULL);
+    findReplaceItem = AddTool(wxID_ANY, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/find.png"))), wxNullBitmap, wxITEM_NORMAL, _("Find and Replace"), wxEmptyString, NULL);
     Realize();
 
     //ToggleTool(codeCompItem->GetId(), true);
     ToggleTool(intellisenseItem->GetId(), true);
+
+    Connect(findReplaceItem->GetId(),wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(EditToolbar::OnFindReplace), NULL, this);
+
+//    this->GetSizer()->Hide(NULL);
 }
 
 EditToolbar::~EditToolbar()
@@ -57,4 +62,11 @@ EditToolbar::~EditToolbar()
 
 }
 
+void EditToolbar::OnFindReplace(wxCommandEvent& event)
+{
+
+    this->mainFrame->ShowFindAndReplace();
+
+    return;
+}
 

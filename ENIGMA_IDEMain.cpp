@@ -80,7 +80,7 @@ const long ENIGMA_IDEFrame::ID_MESSAGESLISTVIEW = wxNewId();
 
 ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 {
-    Create(parent, wxID_ANY, _("ENIGMA Development Environment - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
+    Create(parent, wxID_ANY, _("ENIGMA - <new game>"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     SetClientSize(wxSize(900,600));
     SetIcon(wxIcon(_T("Resources/enigmaicon.ico"), wxBITMAP_TYPE_ICO));
     //SetIcon(wxICON(aaaa));
@@ -111,7 +111,7 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     // *** Other Toolbars... ***
     helpToolbar = new wxAuiToolBar(this, ID_HELPTOOLBAR, wxDefaultPosition, wxDefaultSize, wxAUI_TB_DEFAULT_STYLE);
     helpToolbar->AddTool(ID_AUITOOLBARITEM11, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/help.png"))), wxNullBitmap, wxITEM_NORMAL, _("Help"), wxEmptyString, NULL);
-    helpToolbar->AddTool(ID_AUITOOLBARITEM12, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/information.png"))), wxNullBitmap, wxITEM_NORMAL, _("About"), wxEmptyString, NULL);
+    helpToolbar->AddTool(ID_AUITOOLBARITEM12, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/layout.png"))), wxNullBitmap, wxITEM_NORMAL, _("Reset Layout"), wxEmptyString, NULL);
     helpToolbar->AddTool(ID_AUITOOLBARITEM13, _("Item label"), wxBitmap(wxImage(_T("Resources/icons/application_form.png"))), wxNullBitmap, wxITEM_NORMAL, _("Preferences"), wxEmptyString, NULL);
     helpToolbar->Realize();
 
@@ -147,24 +147,26 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 
     CreateOutputLogTab();
     CreateOuputMessagesTab();
-    Show();
+    this->Show();
     OutputClearAll();
 
     OutputLine("Loading and linking compiler...");
     void *result = LoadPluginLib(this);
+    //void *result;
     if (result == NULL)
     {
-        wxMessageDialog (NULL, "Failed to load the plugin library. Have you compiled and built ENIGMA yet?",
-                         "Library Loading Failed", wxOK|wxCENTRE|wxICON_ERROR, wxDefaultPosition).ShowModal();
+        wxMessageDialog (NULL, "Failed to communicate with the plugin. Have you compiled and built ENIGMA yet?",
+                         "Plugin Loading Failed", wxOK|wxCENTRE|wxICON_ERROR, wxDefaultPosition).ShowModal();
         OutputMessage(MSG_ERROR, "Linking", "IDE Initialization",
                   "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
     }
-            OutputMessage(MSG_NOTICE, "Notice", "IDE Initialization",
-                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
-                          OutputMessage(MSG_WARNING, "Warning", "IDE Initialization",
-                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
-                          OutputMessage(MSG_ERROR, "Error", "IDE Initialization",
-                  "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+
+    OutputMessage(MSG_NOTICE, "Notice", "IDE Initialization",
+      "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+    OutputMessage(MSG_WARNING, "Warning", "IDE Initialization",
+      "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
+    OutputMessage(MSG_ERROR, "Error", "IDE Initialization",
+      "Failed to load the compiler library. ENIGMA may not have been compiled yet or is not in a relative directory.");
 
     OutputLine("Loading definitions...");
     definitionsModified("", ((const char*) "%e-yaml\n"
@@ -191,8 +193,9 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     OutputLine("Parsing definitions...");
     const char* currentResource = (const char*) first_available_resource();
     // some edl keywords must be hard coded
-    fncWords = wxString("return for while break if var global var repeat else mod ");
-    varWords = wxString("argument0 argument1 argument2 argument3 argument4 argument5 argument6 argument7 ");
+    fncWords = wxString("return for while break if var global var repeat else mod");
+    varWords = wxString("argument0 argument1 argument2 argument3 argument4 argument5 argument6 argument7 x y sprite_index image_index"
+                        " true false");
     acpWords = wxString("");
     while (!resources_atEnd())
     {
@@ -219,7 +222,6 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
     managementAUINotebook->ChangeSelection(0);
     outputAUINotebook->ChangeSelection(0);
     editingAUINotebook->ChangeSelection(0);
-//managementAUINotebook->SetFont(0);
 
     OutputLine("IDE Loaded and Ready");
     mainStatusbar->SetStatusText(_T("Ready"));
@@ -228,6 +230,20 @@ ENIGMA_IDEFrame::ENIGMA_IDEFrame(wxWindow* parent, wxWindowID id)
 ENIGMA_IDEFrame::~ENIGMA_IDEFrame()
 {
     mainAUIManager->UnInit();
+}
+
+void ENIGMA_IDEFrame::ShowFindAndReplace()
+{
+    if (findAndReplace == NULL)
+    {
+      findAndReplace = new FindAndReplace(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+      findAndReplace->SetMinSize(wxSize(50,0));
+      mainAUIManager->AddPane(findAndReplace, wxAuiPaneInfo().Name(_T("FindAndReplacePane")).Caption(_("Find and Replace")).CaptionVisible().MinimizeButton().MaximizeButton().PinButton().CloseButton(true).Float().Center().BestSize(wxDefaultSize).MinSize(wxSize(50,0)));
+            mainAUIManager->Update();
+    } else {
+        mainAUIManager->Update();
+      findAndReplace->Show();
+    }
 }
 
 void ENIGMA_IDEFrame::ShowAboutFrame()
@@ -395,9 +411,9 @@ void ENIGMA_IDEFrame::CreateScintillaTab()
     text->SetProperty (wxT("fold.comment"), wxT("1") );
     text->SetProperty (wxT("fold.compact"), wxT("0") );
 
-    wxColor grey( 150, 150, 150);
+    wxColor grey( 255, 0, 0);
     wxColor white(0, 0, 0);
-    wxColor black(255, 255, 255);
+    wxColor black(255, 2, 5);
     text->MarkerDefine (wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS, black, grey);
     text->MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS, black, grey);
     text->MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE, black, grey);
@@ -421,9 +437,9 @@ void ENIGMA_IDEFrame::CreateScintillaTab()
 
     text->AutoCompSetAutoHide(true);
 
-    text->LoadFile(_T("Resources/examplescript.txt"));
+    text->LoadFile(_T("Resources/examplescript.gml"));
     text->SetSelection(0, 0);
-    editingAUINotebook->AddPage(text, _("examplescript.txt"), true);
+    editingAUINotebook->AddPage(text, _("examplescript"), true);
 }
 
 void ENIGMA_IDEFrame::CreateOutputLogTab()
@@ -454,22 +470,37 @@ void ENIGMA_IDEFrame::CreateOuputMessagesTab()
     outputAUINotebook->AddPage(messagesListView, _("Messages"));
 }
 
+struct CTF_OutputClear: ENIGMA_IDEFrame::CrossThreadFrame {
+    bool clog;
+    bool cmessages;
+    CTF_OutputClear(ENIGMA_IDEFrame *f, bool clearlog, bool clearmessages): CrossThreadFrame(f), clog(clearlog), cmessages(clearmessages) {}
+
+    void exec() {
+        if (cmessages)
+        {
+            frame->messagesListView->DeleteAllItems();
+        }
+        if (clog)
+        {
+            frame->outputLogCtrl->Clear();
+            frame->outputLogCtrl->Update(); // this forces it to repaint so that u see the change immediately
+        }
+    }
+};
+
 void ENIGMA_IDEFrame::OutputClearAll()
 {
-    ENIGMA_IDEFrame::OutputLogClear();
-    ENIGMA_IDEFrame::OutputMessagesClear();
+  wxPostEvent(this, CT_Event(new CTF_OutputClear(this, true, true)));
 }
 
 void ENIGMA_IDEFrame::OutputMessagesClear()
 {
-    messagesListView->DeleteAllItems();
+  wxPostEvent(this, CT_Event(new CTF_OutputClear(this, false, true)));
 }
 
 void ENIGMA_IDEFrame::OutputLogClear()
 {
-    outputLogCtrl->Clear();
-    // repaints the control...
-    outputLogCtrl->Update();
+  wxPostEvent(this, CT_Event(new CTF_OutputClear(this, true, false)));
 }
 
 void ENIGMA_IDEFrame::OnMyEvent(CT_Event& event)
@@ -500,14 +531,27 @@ struct CTF_SetProgress: ENIGMA_IDEFrame::CrossThreadFrame {
     int progress;
     CTF_SetProgress(ENIGMA_IDEFrame *f, int p): CrossThreadFrame(f), progress(p) {}
     void exec() {
-        if (progress > 0) { frame->mainStatusbar->progressGauge->SetValue(progress); }
+        if (progress > 0) { frame->mainStatusbar->SetProgress(progress); }
         else { cout << progress; puts(" ERROR: Progress gauge cannot be set lower than 0"); }
         frame->mainStatusbar->progressGauge->Update();
     }
 };
 
+struct CTF_SetProgressText: ENIGMA_IDEFrame::CrossThreadFrame {
+    wxString text;
+    CTF_SetProgressText(ENIGMA_IDEFrame *f, const char* t): CrossThreadFrame(f), text(t) {}
+
+    void exec() {
+        frame->mainStatusbar->SetStatusText(text);
+    }
+};
+
 void ENIGMA_IDEFrame::SetProgress(int progress) {
     wxPostEvent(this, CT_Event(new CTF_SetProgress(this, progress)));
+}
+
+void ENIGMA_IDEFrame::SetProgressText(const char *text) {
+    wxPostEvent(this, CT_Event(new CTF_SetProgressText(this, text)));
 }
 
 
@@ -517,36 +561,49 @@ void ENIGMA_IDEFrame::OutputLine(const char *text)
     wxPostEvent(this, CT_Event(new CTF_OutputText(this, "\n")));
 }
 
+struct CTF_OutputMessage: ENIGMA_IDEFrame::CrossThreadFrame {
+    int type;
+    const char* origin;
+    const char* location;
+    const char* description;
+    CTF_OutputMessage(ENIGMA_IDEFrame *f, int t, const char *orig, const char *locat, const char *desc):
+    CrossThreadFrame(f), type(t), origin(orig), location(locat), description(desc) {}
+
+    void exec() {
+      int id = frame->messagesListView->GetItemCount();
+      wxListItem listItem;
+      listItem.SetId(id);
+      //listItem.SetText(uniquename);
+      switch (type)
+      {
+          case MSG_NOTICE:
+              // notice
+              listItem.SetImage(0);
+              break;
+          case MSG_WARNING:
+              listItem.SetImage(1);
+              // warning
+              break;
+          case MSG_ERROR:
+              listItem.SetImage(2);
+              // error
+              break;
+          default:
+              // other
+              break;
+      }
+
+      frame->messagesListView->InsertItem(listItem);
+
+      frame->messagesListView->SetItem(id, 0, wxString::FromUTF8(origin));
+      frame->messagesListView->SetItem(id, 1, wxString::FromUTF8(location));
+      frame->messagesListView->SetItem(id, 2, wxString::FromUTF8(description));
+    }
+};
+
 void ENIGMA_IDEFrame::OutputMessage(int type, const char *origin, const char *location, const char *description)
 {
-    int id = messagesListView->GetItemCount();
-    wxListItem listItem;
-    listItem.SetId(id);
-    //listItem.SetText(uniquename);
-    switch (type)
-    {
-        case MSG_NOTICE:
-            // notice
-            listItem.SetImage(0);
-            break;
-        case MSG_WARNING:
-            listItem.SetImage(1);
-            // warning
-            break;
-        case MSG_ERROR:
-            listItem.SetImage(2);
-            // error
-            break;
-        default:
-            // other
-            break;
-    }
-
-    messagesListView->InsertItem(listItem);
-
-    messagesListView->SetItem(id, 0, wxString::FromUTF8(origin));
-    messagesListView->SetItem(id, 1, wxString::FromUTF8(location));
-    messagesListView->SetItem(id, 2, wxString::FromUTF8(description));
+    wxPostEvent(this, CT_Event(new CTF_OutputMessage(this, type, origin, location, description)));
 }
 
 void ENIGMA_IDEFrame::OnClose(wxCloseEvent& event)

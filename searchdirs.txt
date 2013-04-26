@@ -1,27 +1,28 @@
 Using built-in specs.
 COLLECT_GCC=/usr/bin/gcc
-Target: i686-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu/Linaro 4.7.2-2ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.7/README.Bugs --enable-languages=c,c++,go,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.7 --enable-shared --enable-linker-build-id --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.7 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --enable-plugin --enable-objc-gc --enable-targets=all --disable-werror --with-arch-32=i686 --with-tune=generic --enable-checking=release --build=i686-linux-gnu --host=i686-linux-gnu --target=i686-linux-gnu
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu/Linaro 4.7.3-1ubuntu1' --with-bugurl=file:///usr/share/doc/gcc-4.7/README.Bugs --enable-languages=c,c++,go,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.7 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.7 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --enable-plugin --with-system-zlib --enable-objc-gc --with-cloog --enable-cloog-backend=ppl --disable-cloog-version-check --disable-ppl-version-check --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
 Thread model: posix
-gcc version 4.7.2 (Ubuntu/Linaro 4.7.2-2ubuntu1) 
-COLLECT_GCC_OPTIONS='-E' '-v' '-mtune=generic' '-march=i686'
- /usr/lib/gcc/i686-linux-gnu/4.7/cc1plus -E -quiet -v -imultiarch i386-linux-gnu -D_GNU_SOURCE blank.txt -mtune=generic -march=i686 -fstack-protector
-ignoring nonexistent directory "/usr/local/include/i386-linux-gnu"
-ignoring nonexistent directory "/usr/lib/gcc/i686-linux-gnu/4.7/../../../../i686-linux-gnu/include"
+gcc version 4.7.3 (Ubuntu/Linaro 4.7.3-1ubuntu1) 
+COLLECT_GCC_OPTIONS='-E' '-v' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/cc1plus -E -quiet -v -imultilib . -imultiarch x86_64-linux-gnu -D_GNU_SOURCE blank.txt -mtune=generic -march=x86-64 -fstack-protector
+ignoring duplicate directory "/usr/include/x86_64-linux-gnu/c++/4.7"
+ignoring nonexistent directory "/usr/local/include/x86_64-linux-gnu"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../x86_64-linux-gnu/include"
 #include "..." search starts here:
 #include <...> search starts here:
  /usr/include/c++/4.7
- /usr/include/c++/4.7/i686-linux-gnu
+ /usr/include/x86_64-linux-gnu/c++/4.7/.
  /usr/include/c++/4.7/backward
- /usr/lib/gcc/i686-linux-gnu/4.7/include
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/include
  /usr/local/include
- /usr/lib/gcc/i686-linux-gnu/4.7/include-fixed
- /usr/include/i386-linux-gnu
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed
+ /usr/include/x86_64-linux-gnu
  /usr/include
 End of search list.
 # 1 "blank.txt"
 # 1 "<command-line>"
 # 1 "blank.txt"
-COMPILER_PATH=/usr/lib/gcc/i686-linux-gnu/4.7/:/usr/lib/gcc/i686-linux-gnu/4.7/:/usr/lib/gcc/i686-linux-gnu/:/usr/lib/gcc/i686-linux-gnu/4.7/:/usr/lib/gcc/i686-linux-gnu/
-LIBRARY_PATH=/usr/lib/gcc/i686-linux-gnu/4.7/:/usr/lib/gcc/i686-linux-gnu/4.7/../../../i386-linux-gnu/:/usr/lib/gcc/i686-linux-gnu/4.7/../../../../lib/:/lib/i386-linux-gnu/:/lib/../lib/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/i686-linux-gnu/4.7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-E' '-v' '-mtune=generic' '-march=i686'
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.7/:/usr/lib/gcc/x86_64-linux-gnu/4.7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.7/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.7/:/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.7/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-E' '-v' '-mtune=generic' '-march=x86-64'

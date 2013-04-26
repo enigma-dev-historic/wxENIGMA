@@ -36,6 +36,7 @@ class ENIGMA_IDEFrame;
 #include "AboutFrame.h"
 #include "Preferences.h"
 #include "ProjectSettings.h"
+#include "FindAndReplace.h"
 #include <stdio.h>
 #include <deque>
 #include <thread>
@@ -109,6 +110,7 @@ class ENIGMA_IDEFrame: public wxFrame
         wxAuiNotebook* editingAUINotebook;
         wxAuiNotebook* managementAUINotebook;
         wxAuiNotebook* outputAUINotebook;
+        FindAndReplace* findAndReplace;
 
         BuildToolbar* buildToolbar;
         EditToolbar* editToolbar;
@@ -126,6 +128,7 @@ class ENIGMA_IDEFrame: public wxFrame
         AboutFrame* aboutFrame;
         Preferences* preferencesFrame;
         ProjectSettings* settingsFrame;
+        void ShowFindAndReplace();
         void ShowAboutFrame();
         void ShowSettingsFrame();
         void ShowPreferencesFrame();
@@ -145,6 +148,7 @@ class ENIGMA_IDEFrame: public wxFrame
         void OutputLogClear();
         void OutputMessagesClear();
         void SetProgress(int progress);
+        void SetProgressText(const char *text);
         void OnMyEvent(CT_Event& event);
 
         struct CrossThreadFrame : CrossThread {

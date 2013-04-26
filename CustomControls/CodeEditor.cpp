@@ -39,6 +39,8 @@ StyledTextCtrl::StyledTextCtrl(ENIGMA_IDEFrame* frame, const long id)
     RegisterImage(0, frame->ControlImages->GetBitmap(4));
     RegisterImage(1, frame->ControlImages->GetBitmap(5));
 
+    SetFoldFlags(wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED);
+
     Connect(wxEVT_STC_MARGINCLICK, wxStyledTextEventHandler(StyledTextCtrl::OnMarginClick), NULL, this);
     Connect(wxEVT_STC_CHARADDED, wxStyledTextEventHandler(StyledTextCtrl::OnAutoComplete), NULL, this);
     Connect(wxEVT_STC_CHANGE, wxStyledTextEventHandler(StyledTextCtrl::OnChange), NULL, this);

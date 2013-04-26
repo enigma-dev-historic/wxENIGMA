@@ -31,6 +31,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="`wx-config --version=2.9 --cxxflags wxUSE_THREADS = 1`" />
 			<Add option="-I./enigma/CompilerSource" />
@@ -40,10 +41,10 @@
 			<Add option="-I./ProjectClasses" />
 			<Add option="-I./ProjectClasses/ResourceTypes" />
 			<Add option="-I./Plugin" />
-			<Add option="-std=c++11" />
+			<Add option="-I./CustomPanels" />
 		</Compiler>
 		<Linker>
-			<Add option="`wx-config --version=2.9 --libs html net aui stc propgrid richtext`" />
+			<Add option="`wx-config --version=2.9 --libs all base html net aui stc propgrid richtext` -ldl" />
 		</Linker>
 		<Unit filename="CustomControls/BuildToolbar.cpp" />
 		<Unit filename="CustomControls/BuildToolbar.h" />
@@ -65,6 +66,8 @@
 		<Unit filename="CustomFrames/Preferences.h" />
 		<Unit filename="CustomFrames/ProjectSettings.cpp" />
 		<Unit filename="CustomFrames/ProjectSettings.h" />
+		<Unit filename="CustomPanels/FindAndReplace.cpp" />
+		<Unit filename="CustomPanels/FindAndReplace.h" />
 		<Unit filename="ENIGMA_IDEApp.cpp" />
 		<Unit filename="ENIGMA_IDEApp.h" />
 		<Unit filename="ENIGMA_IDEMain.cpp" />
@@ -109,6 +112,7 @@
 					<wxFrame wxs="wxsmith/AboutFrame.wxs" src="CustomFrames/AboutFrame.cpp" hdr="CustomFrames/AboutFrame.h" name="AboutFrame" language="CPP" />
 					<wxFrame wxs="wxsmith/ProjectSettings.wxs" src="CustomFrames/ProjectSettings.cpp" hdr="CustomFrames/ProjectSettings.h" name="ProjectSettings" language="CPP" />
 					<wxFrame wxs="wxsmith/Preferences.wxs" src="CustomFrames/Preferences.cpp" hdr="CustomFrames/Preferences.h" name="Preferences" language="CPP" />
+					<wxPanel wxs="wxsmith/FindAndReplace.wxs" src="CustomPanels/FindAndReplace.cpp" hdr="CustomPanels/FindAndReplace.h" name="FindAndReplace" language="CPP" />
 				</resources>
 			</wxsmith>
 			<DoxyBlocks>

@@ -32,21 +32,40 @@ using namespace std;
 ENIGMA_IDEFrame* enigmaFrame;
 
 //Opens the EnigmaFrame
-static void ede_dia_open() {  }
+static void ede_dia_open()
+{
+    enigmaFrame->outputAUINotebook->Show();
+}
 //Appends a given text to the frame log
-static void ede_dia_add(const char* text) {    enigmaFrame->OutputText(text);     }
+static void ede_dia_add(const char* text)
+{
+    enigmaFrame->OutputText(text);
+}
 //Clears the frame log
-static void ede_dia_clear() {}//  wxMutexGuiEnter(); enigmaFrame->OutputClearAll();     wxMutexGuiLeave(); }
+static void ede_dia_clear()
+{
+    enigmaFrame->OutputClearAll();
+}
 //Sets the progress bar (0-100)
-static void ede_dia_progress(int progress) {
+static void ede_dia_progress(int progress)
+{
     enigmaFrame->SetProgress(progress);
 }
 //Applies a given text to the progress bar
-static void ede_dia_progress_text(const char* caption) {  }
+static void ede_dia_progress_text(const char* caption)
+{
+    enigmaFrame->SetProgressText(caption);
+}
 //Sets the file from which data is redirected to frame log
-static void ede_output_redirect_file(const char* filepath) { }// enigmaFrame->OutputLine(filepath); }
+static void ede_output_redirect_file(const char* filepath)
+{
+
+}
 //Indicates file completion, dumps remainder to frame log
-static void ede_output_redirect_reset() {  }//enigmaFrame->OutputLine("redirect reset"); }
+static void ede_output_redirect_reset()
+{
+
+}
 //Executes a given command, returns errors or ret val
 //static int ede_ide_execute(const char*, const char**, bool) {  }
  //Compresses data. Note image width/height unused
@@ -58,6 +77,7 @@ void* LoadPluginLib(ENIGMA_IDEFrame* frame)
 
 }
 #else
+
 void* LoadPluginLib(ENIGMA_IDEFrame* frame)
 {
     enigmaFrame = frame;
@@ -68,6 +88,11 @@ void* LoadPluginLib(ENIGMA_IDEFrame* frame)
     #endif
 
     void *handle = dlopen(("enigma/libcompileEGMf" + extension).c_str(), RTLD_NOW | RTLD_GLOBAL);
+
+    if (handle == NULL)
+    {
+      return 0;
+    }
 
     libInit = (const char* (*)(EnigmaCallbacks*)) LoadPluginFnc(handle, "libInit");
     compileEGMf = (int (*)(EnigmaStruct *es, const char* exe_filename, int mode)) LoadPluginFnc(handle, "compileEGMf");
